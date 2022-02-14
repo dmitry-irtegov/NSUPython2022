@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 def problem1(num_list: [int]) -> [int]:
     res: [int] = []
     s: int = 0
