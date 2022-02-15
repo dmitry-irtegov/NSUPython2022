@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-def fltr(list, a, b):
+def fltr(list: [int], a: int, b: int):
+    if b < a:
+        raise ValueError("upper limit B is less then lower limit A.")
     result = [compare(element, a, b) for element in list]
     return result
 
