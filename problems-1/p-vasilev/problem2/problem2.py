@@ -14,5 +14,10 @@ def problem2(num_list: [int], lower_bound: int = None, higher_bound: int = None)
 
 
 if __name__ == '__main__':
-    print(problem2(range(10), 3, 7))
-    print(problem2(range(10), higher_bound=6))
+    print('Enter the input list (space-separated):')
+    input_list = [int(i) for i in input().split()]
+    print('Enter the two bounds (space-separated, enter "-" to skip a bound):')
+    a = input().split()
+    b = int(a[1]) if a[1] != '-' else None
+    a = int(a[0]) if a[0] != '-' else None
+    print(*problem2(input_list, a, b))
