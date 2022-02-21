@@ -5,7 +5,7 @@ def getReverseDictByFileName(filename):
     orig_dict = {}
     with  open(filename, 'r') as orig_dict_file:
         for line in orig_dict_file:
-            words = re.split(', | - ', line[:-1]) # there is hope for the last line to end in \n as well
+            words = re.split(', | - ', str.rstrip(line))
             orig = words[0]
             translations = words[1:]
             orig_dict[orig] = translations
