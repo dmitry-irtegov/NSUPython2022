@@ -16,7 +16,8 @@ def compare(element, a, b):
 
 
 if __name__ == '__main__':
-    l = [1, 2, 3]
-    a = 2
-    b = 2
-    print(f"Answer for list [1,2,3] with a=2 and b=2 should be [2, 2, 2]: {fltr(l, a, b)}")
+    l = input('Enter the list: ')
+    a = int(input('lower bound: '))
+    b = int(input('upper bound: '))
+    result = fltr(map(int, l.split()), a, b)
+    print('Answer for the list is: ', result)
