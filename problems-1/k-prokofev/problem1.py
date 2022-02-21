@@ -8,5 +8,8 @@ def cumulativeSums(list):
         result.append(currentSum)
     return result
 
+
 if __name__ == '__main__':
-     print(f"cumulativeSums [1,3,5,7] should be [0, 1, 4, 9, 16]: {cumulativeSums([1,3,5,7])}")
+    in_s = input('Enter the numbers: ')
+    result = cumulativeSums(map(int, in_s.split()))
+    print('Result is:', result)
