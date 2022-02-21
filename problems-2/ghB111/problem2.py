@@ -3,12 +3,17 @@ import re
 def getReverseDictByFileName(filename):
 
     orig_dict = {}
-    with  open(filename, 'r') as orig_dict_file:
-        for line in orig_dict_file:
-            words = re.split(', | - ', str.rstrip(line))
-            orig = words[0]
-            translations = words[1:]
-            orig_dict[orig] = translations
+    try:
+        orig_dict_file = open(filename, 'r')
+    except IOError as e:
+        raise IOError("Can't read dict file") from e
+    else:
+        with orig_dict_file:
+            for line in orig_dict_file:
+                words = re.split(', | - ', str.rstrip(line))
+                orig = words[0]
+                translations = words[1:]
+                orig_dict[orig] = translations
 
     new_dict = {}
 
