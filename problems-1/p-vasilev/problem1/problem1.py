@@ -12,4 +12,6 @@ def problem1(num_list: [int]) -> [int]:
 
 
 if __name__ == '__main__':
-    print(problem1([1, 2, 3, 4, 5]))
+    print('Enter the input list (space-separated):')
+    input_list = [int(i) for i in input().split()]
+    print(problem1(input_list))
