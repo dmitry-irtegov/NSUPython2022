@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-
+import sys
 from typing import Dict
 
 
 def isprime(n: int) -> bool:
     """Checks whether a number is prime."""
+    if n <= 0:
+        raise ValueError
+    if n == 1:
+        return False
     if n == 2 or n == 3:
         return True
     if n % 2 == 0 or n % 3 == 0:
@@ -20,6 +24,8 @@ def isprime(n: int) -> bool:
 def nextprime(n: int) -> int:
     """Gets a number that's bigger than input and prime
     (the input has to be prime)"""
+    if n <= 1:
+        raise ValueError
     if n == 2:
         return 3
     if n == 3:
@@ -43,12 +49,14 @@ def problem5(n: int) -> Dict[int, int]:
 
     # stop if n is prime or is a 1
     while not isprime(n) and not n == 1:
+
         # if t divides n, get the degree of the factor
         if n % t == 0:
             res[t] = 0
             while n % t == 0:
                 n = n // t
                 res[t] += 1
+
         # get the next prime to check
         t = nextprime(t)
 
@@ -58,6 +66,25 @@ def problem5(n: int) -> Dict[int, int]:
     return res
 
 
+def main():
+    print('Enter input number:')
+    while True:
+        try:
+            n = int(input())
+            if n <= 0:
+                print('The input has to be a positive integer. Try again.', file=sys.stderr)
+                continue
+            break
+
+        except ValueError:
+            print('Input should be an integer. Try again.', file=sys.stderr)
+
+        except KeyboardInterrupt:
+            print()
+            exit(0)
+
+    print(problem5(n))
+
+
 if __name__ == '__main__':
-    inp = 2 ** 3 * 3 ** 12 * 5 ** 3
-    print(problem5(inp))
+    main()
