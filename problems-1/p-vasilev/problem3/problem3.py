@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+
 
 def problem3(n: int) -> [int]:
     """Returns a list of numbers that emerge from checking Collatz conjecture on the input."""
@@ -11,5 +13,18 @@ def problem3(n: int) -> [int]:
     return res
 
 
+def main():
+    print('Enter input number:')
+    while True:
+        try:
+            print(*problem3(int(input())), sep=' -> ')
+            break
+        except ValueError:
+            print('Input should be a positive integer. Try again.', file=sys.stderr)
+        except KeyboardInterrupt:
+            print()
+            exit(0)
+
+
 if __name__ == '__main__':
-    print(*problem3(10), sep=' -> ')
+    main()
