@@ -3,10 +3,25 @@
 This module implements solution for problem 5 in Problems-2 [1]
 [1]: http://parallels.nsu.ru/~fat/Python/problems-2.pdf
 """
+from math import sqrt
+
+
+def get_primes(n):
+    """
+    Retruns list of prime numbers to the given numbers
+    :param n: given number
+    :return: list of prime numbers
+    """
+    return [
+        i for i in range(2, n + 1) if all(i % j != 0 for j in range(2, int(sqrt(i)) + 1))
+    ]
+
 
 if __name__ == '__main__':
-    print('Enter upper bound to generate list of prime numbers')
-    num = int(input())
-    print([
-        i for i in range(2, num + 1) if all(i % j != 0 for j in range(2, int(i ** 0.5) + 1))
-    ])
+    while True:
+        try:
+            num = int(input('Enter upper bound to generate list of prime numbers: '))
+            print(get_primes(num))
+            break
+        except ValueError as e:
+            print(f'Invalid input: \n{e} \nTry again.')
