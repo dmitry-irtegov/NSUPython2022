@@ -11,5 +11,9 @@ def cumulativeSums(list):
 
 if __name__ == '__main__':
     in_s = input('Enter the numbers: ')
-    result = cumulativeSums(map(int, in_s.split()))
-    print('Result is:', result)
+    try:
+        list = map(int, in_s.split())
+        result = cumulativeSums(list)
+        print('Result is:', result)
+    except ValueError:
+        print('Please enter integers. Try again.')
