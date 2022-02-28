@@ -25,3 +25,8 @@ if __name__ == '__main__':
             break
         except ValueError as e:
             print(f'Invalid input: \n{e} \nTry again.')
+        except KeyboardInterrupt:
+            print()
+            exit(0)
+        except Exception as e:
+            print(f"{e}\nTry again")
