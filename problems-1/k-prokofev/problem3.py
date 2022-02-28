@@ -13,6 +13,9 @@ def collatz(number: int):
 
 
 if __name__ == '__main__':
-    a = int(input('Enter number: '))
-    result = collatz(a)
-    print(result)
+    try:
+        a = int(input('Enter number: '))
+        result = collatz(a)
+        print(result)
+    except ValueError:
+        print('Please enter an integer. Try again.')
