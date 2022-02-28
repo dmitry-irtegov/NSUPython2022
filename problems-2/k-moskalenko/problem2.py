@@ -1,3 +1,6 @@
+import sys
+
+
 def create_dict(filename):
     """
     Reads the file and constructs a reversed dictionary.
@@ -18,7 +21,10 @@ def create_dict(filename):
 
 
 if __name__ == '__main__':
-    dictionary = create_dict('dict.txt')
-    for key in sorted(dictionary.keys()):
-        translations = sorted(dictionary[key])
-        print(key, '-', ', '.join(translations))
+    try:
+        dictionary = create_dict('dict.txt')
+        for key in sorted(dictionary.keys()):
+            translations = sorted(dictionary[key])
+            print(key, '-', ', '.join(translations))
+    except OSError as e:
+        print(f'OS Error: {e.strerror}', file=sys.stderr)
