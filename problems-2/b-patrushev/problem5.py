@@ -28,5 +28,8 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             print()
             exit(0)
+        except EOFError as e:
+            print()
+            exit(0)
         except Exception as e:
             print(f"{e}\nTry again")
