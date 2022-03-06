@@ -13,24 +13,20 @@ def problem1(n):
 
 
 def main():
-    print('Enter input number:')
-    while True:
-        try:
-            n = int(input())
-            if n < 1:
-                print('Input has to be positive. Try again.', file=sys.stderr)
-                continue
-            break
+    try:
+        print('Enter input number:')
+        n = int(input())
+        if n < 1:
+            raise ValueError('Input has to be positive. Try again.')
 
-        except ValueError:
-            print('Input should be an integer. Try again.', file=sys.stderr)
+        for i in problem1(n):
+            print(i)
 
-        except KeyboardInterrupt:
-            print()
-            exit(0)
-
-    for i in problem1(n):
-        print(i)
+    except Exception as e:
+        print('During execution an exception was raised:')
+        print(f'{type(e).__name__}: {e}')
+    except KeyboardInterrupt:
+        print()
 
 
 if __name__ == '__main__':
