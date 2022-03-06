@@ -14,19 +14,16 @@ def problem1(num_list: [int]) -> [int]:
 
 
 def main():
-    print('Enter the input list (space-separated):')
-    while True:
-        try:
-            input_list = [int(i) for i in input().split()]
-            break
-        except ValueError:
-            print('Input should only contain integers. Try again.', file=sys.stderr)
-        except KeyboardInterrupt:
-            print()
-            exit(0)
-
-    print('Answer: ')
-    print(*problem1(input_list))
+    try:
+        print('Enter the input list (space-separated):')
+        input_list = [int(i) for i in input().split()]
+        print('Answer: ')
+        print(*problem1(input_list))
+    except Exception as e:
+        print('During execution an exception was raised:', file=sys.stderr)
+        print(f'{type(e).__name__}: {e}')
+    except KeyboardInterrupt:
+        print()
 
 
 if __name__ == '__main__':
