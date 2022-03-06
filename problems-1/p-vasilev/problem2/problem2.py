@@ -19,40 +19,26 @@ def problem2(num_list: [int], lower_bound: int = None, higher_bound: int = None)
 
 
 def main():
-    print('Enter the input list (space-separated):')
+    try:
+        print('Enter the input list (space-separated):')
+        input_list = [int(i) for i in input().split()]
 
-    while True:
-        try:
-            input_list = [int(i) for i in input().split()]
-            break
-        except ValueError:
-            print('Input should only contain integers. Try again.', file=sys.stderr)
-        except KeyboardInterrupt:
-            print()
-            exit(0)
+        print('Enter the two bounds (space-separated, enter "-" to skip a bound):')
+        bounds = input().split()
+        a = int(bounds[0]) if bounds[0] != '-' else None
+        b = int(bounds[1]) if bounds[1] != '-' else None
 
-    print('Enter the two bounds (space-separated, enter "-" to skip a bound):')
-    while True:
-        try:
-            a = input().split()
-            b = int(a[1]) if a[1] != '-' else None
-            a = int(a[0]) if a[0] != '-' else None
+        if a and b and a > b:
+            raise ValueError('The lower bound should go first, higher should go second.')
 
-            if a and b and a > b:
-                print('The lower bound should go first, higher should go second. Try again.')
-                continue
-            
-            break
-        except ValueError:
-            print('The bounds should be integers or "-". Try again.', file=sys.stderr)
-        except IndexError:
-            print('Two bounds should be entered. Try again.', file=sys.stderr)
-        except KeyboardInterrupt:
-            print()
-            exit(0)
+        print('Answer: ')
+        print(problem2(input_list, a, b))
 
-    print('Answer: ')
-    print(problem2(input_list, a, b))
+    except Exception as e:
+        print('During execution an exception was raised:')
+        print(f'{type(e).__name__}: {e}')
+    except KeyboardInterrupt:
+        print()
 
 
 if __name__ == '__main__':
