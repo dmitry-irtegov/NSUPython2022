@@ -1,13 +1,15 @@
-def get_pythagorean_triples(n):
+def get_pythagorean_triples(limit):
 	"""
-	Return all Pythagorean triples where all numbers are at most n
+	Return Pythagorean triples where all numbers are at most limit
+
+	:param limit: maximum value of triplet element
+	:return: list of triplets
 	"""
 	return [
-		(a, b, c) 
-		for a in range(1, n + 1)
-		for b in range(1, n + 1) 
-		for c in range(1, n + 1)
-		if a <= b and a ** 2 + b ** 2 == c ** 2
+		(m*m - n*n, 2 * m * n, m*m + n*n) 
+		for m in range(2, limit)
+		for n in range(1, m) 
+		if m*m + n*n <= limit
 	]
 
 if __name__ == '__main__':
