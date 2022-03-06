@@ -10,12 +10,12 @@ if __name__ == '__main__':
 		with open("pi.txt") as file:
 			file.read(2)
 			pi_number = file.read().replace('\n', '')
-	except FileNotFoundError:
-		sys.exit("There is no pi.txt file")
-	except IsADirectoryError:
-		sys.exit("pi.txt is a directory")
-	except OSError:
-		sys.exit("OSError occurred while reading pi.txt file")
+	except IsADirectoryError as e:
+		sys.exit(f'IsADirectoryError occurred for "{e.filename}": {e.strerror}')
+	except FileNotFoundError as e:
+		sys.exit(f'FileNotFoundError occurred for "{e.filename}": {e.strerror}')
+	except OSError as e:
+		sys.exit(f'OSError occurred for "{e.filename}": {e.strerror}')
 
 	print("Enter sequence to search for.")
 	sequence = input()
@@ -33,6 +33,6 @@ if __name__ == '__main__':
 		sequences_found += 1
 		current_position = pi_number.find(sequence, current_position + 1)
 
-	print(f'Found {sequences_found} results.')
+	print(f'Found {sequences_found} result{"s" if sequences_found > 1 else ""}.')
 	if sequences_found > 0:
 		print(f'Positions: {" ".join(sequences)} {"..." if sequences_found > 5 else ""}')
