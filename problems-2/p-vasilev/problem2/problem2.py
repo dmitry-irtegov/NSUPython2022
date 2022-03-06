@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-
+import sys
 from typing import Dict, List
+import re
 
 
 def rev_dict(d: Dict[str, List[str]]) -> Dict[str, List[str]]:
@@ -17,9 +18,14 @@ def rev_dict(d: Dict[str, List[str]]) -> Dict[str, List[str]]:
 def parse_dict(s: str) -> Dict[str, List[str]]:
     """Parses a dictionary."""
     res = {}
-    for i in [i.split(' - ') for i in s.splitlines()]:
-        key = i[0]
-        val = i[1].split(', ')
+    for i in [j.split('-') for j in s.splitlines()]:
+        try:
+            key = i[0].strip()
+            val = [k.strip() for k in i[1].split(',')]
+        except IndexError:
+            raise ValueError('Lines have to have the word and its translations separated by "-" symbol')
+        if not key.isalpha() or False in [i.isalpha() for i in val]:
+            raise ValueError('Words have to be alphabetic and non-empty')
         res[key] = val
     return res
 
@@ -32,8 +38,32 @@ def problem2(s: str):
         print(*sorted(res[i]), sep=', ')
 
 
-if __name__ == '__main__':
-    teststring = "apple - malum, pomum, popula\nfruit - baca, bacca, popum\npunishment - malum, multa"
-    problem2(teststring)
+def main():
+    try:
 
+        default_str = "apple - malum, pomum, popula\nfruit - baca, bacca, popum\npunishment - malum, multa"
+        print('Enter input string by string, leave empty for default input:')
+
+        input_str = input()
+
+        if input_str == '':
+            input_str = default_str
+        else:
+            while True:
+                print('Enter the next string, leave empty to end input:')
+                t = input()
+                if t == '':
+                    break
+                input_str += '\n' + t
+        problem2(input_str)
+
+    except Exception as e:
+        print('During execution an exception was raised:', file=sys.stderr)
+        print(f'{type(e).__name__}: {e}')
+    except KeyboardInterrupt:
+        print()
+
+
+if __name__ == '__main__':
+    main()
 
