@@ -67,23 +67,18 @@ def problem5(n: int) -> Dict[int, int]:
 
 
 def main():
-    print('Enter input number:')
-    while True:
-        try:
-            n = int(input())
-            if n <= 0:
-                print('The input has to be a positive integer. Try again.', file=sys.stderr)
-                continue
-            break
+    try:
+        print('Enter input number:')
+        n = int(input())
+        if n <= 0:
+            raise ValueError('The input has to be a positive integer.')
 
-        except ValueError:
-            print('Input should be an integer. Try again.', file=sys.stderr)
-
-        except KeyboardInterrupt:
-            print()
-            exit(0)
-
-    print(problem5(n))
+        print(problem5(n))
+    except Exception as e:
+        print('During execution an exception was raised:', file=sys.stderr)
+        print(f'{type(e).__name__}: {e}')
+    except KeyboardInterrupt:
+        print()
 
 
 if __name__ == '__main__':
