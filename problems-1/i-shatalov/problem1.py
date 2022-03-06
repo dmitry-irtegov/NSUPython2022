@@ -1,11 +1,17 @@
-def cumalative(array):
-    sum = 0
+def cumulative(array):
+    res = 0
     tmpArr = [0]
     for x in array:
-        sum += x
-        tmpArr.append(sum)
+        res += x
+        tmpArr.append(res)
     return tmpArr
 
 
 if __name__ == "__main__":
-    print(cumalative([1, 2, 3, 4]))
+    try:
+        input_array = [int(value) for value in input("Please enter array of numbers: ").split()]
+        print(cumulative(input_array))
+    except ValueError as e:
+        print("Error: ", e)
+    except BaseException:
+        print("Error! Please enter array of integer numbers separated with space.")
