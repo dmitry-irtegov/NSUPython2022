@@ -14,16 +14,15 @@ def problem3(n: int) -> [int]:
 
 
 def main():
-    print('Enter input number:')
-    while True:
-        try:
-            print(*problem3(int(input())), sep=' -> ')
-            break
-        except ValueError:
-            print('Input should be a positive integer. Try again.', file=sys.stderr)
-        except KeyboardInterrupt:
-            print()
-            exit(0)
+    try:
+        print('Enter input number:')
+        print(*problem3(int(input())), sep=' -> ')
+                
+    except Exception as e:
+        print('During execution an exception was raised:', file=sys.stderr)
+        print(f'{type(e).__name__}: {e}')
+    except KeyboardInterrupt:
+        print()
 
 
 if __name__ == '__main__':
