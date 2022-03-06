@@ -11,20 +11,18 @@ def problem5(n):
 
 
 def main():
-    print('Enter input number:')
-    while True:
-        try:
-            n = int(input())
-            break
+    try:
+        print('Enter input number:')
 
-        except ValueError:
-            print('Input should be an integer. Try again.', file=sys.stderr)
+        n = int(input())
 
-        except KeyboardInterrupt:
-            print()
-            exit(0)
+        print(problem5(n))
 
-    print(problem5(n))
+    except Exception as e:
+        print('During execution an exception was raised:', file=sys.stderr)
+        print(f'{type(e).__name__}: {e}')
+    except KeyboardInterrupt:
+        print()
 
 
 if __name__ == '__main__':
