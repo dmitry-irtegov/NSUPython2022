@@ -1,9 +1,14 @@
 import os
+import sys
 from argparse import ArgumentParser
 
 def getDirFiles(path):
-	if not os.path.exists(path) or not os.path.isdir(path):
-		raise ValueError("Incorrect directory path")
+	"""
+	The function takes a directory path and prints
+	file name and file size for each file in the directory.
+
+	:param path: path to directory
+	"""
 
 	files = [s for s in os.listdir(path) 
 		if os.path.isfile(os.path.join(path, s))
@@ -19,6 +24,13 @@ def getDirFiles(path):
 
 if __name__ == '__main__':
 	parser = ArgumentParser()
-	parser.add_argument("path", help="Enter path to the directory")
+	parser.add_argument("path", type=str, help="Enter path to the directory")
 	args = parser.parse_args()
-	getDirFiles(args.path)
+	try:
+		getDirFiles(args.path)
+	except NotADirectoryError as e:
+		print(f'NotADirectoryError occurred for "{e.filename}": {e.strerror}', file=sys.stderr)
+	except FileNotFoundError as e:
+		print(f'FileNotFoundError occurred for "{e.filename}": {e.strerror}', file=sys.stderr)
+	except OSError as e:
+		print(f'OSError occurred for "{e.filename}": {e.strerror}', file=sys.stderr)
