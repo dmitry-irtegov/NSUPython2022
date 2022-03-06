@@ -1,4 +1,5 @@
 import re
+import sys
 
 def getReverseDictByFileName(filename):
 
@@ -29,10 +30,14 @@ def getReverseDictByFileName(filename):
 
 
 if __name__ == '__main__':
-    new_dict = getReverseDictByFileName('dict.txt')
+    try:
+        new_dict = getReverseDictByFileName('dict.txt')
+    except Exception as e:
+        cause = e.__cause__
+        cause_message = f"because {cause}" if cause is not None else ""
+        print(f"Error happened: {e} {cause_message} \n exiting now...", file=sys.stderr)
+        exit(1)
     print("Result is: ")
     for key in sorted(new_dict.keys()):
         translations = new_dict[key]
         print(f"{key} - {', '.join(translations)}")
-    
-
