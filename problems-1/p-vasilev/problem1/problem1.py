@@ -21,7 +21,7 @@ def main():
         print(*problem1(input_list))
     except Exception as e:
         print('During execution an exception was raised:', file=sys.stderr)
-        print(f'{type(e).__name__}: {e}')
+        print(f'{type(e).__name__}: {e}', file=sys.stderr)
     except KeyboardInterrupt:
         print()
 
