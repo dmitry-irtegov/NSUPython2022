@@ -6,10 +6,6 @@ This module implements solution for problem 1 in Problems-2 [1]
 import math
 
 
-def check(number):
-    return math.ceil(number) == math.floor(number)
-
-
 def get_pythagorean_triples(number):
     """
     Returns all Pythagorean triples to the given number
@@ -17,10 +13,10 @@ def get_pythagorean_triples(number):
     :return: list of Pythagorean triples
     """
     return [
-        (x , y, int(math.sqrt(x*x +  y*y)))
-        for x in range(num)
+        (x , y, int(math.sqrt(x*x  +  y*y)))
+        for x in range(number)
         for y in range(1, x)
-        if check(math.sqrt(x*x + y*y))
+        if (math.sqrt(x*x + y*y)).is_integer() and math.sqrt(x*x + y*y) <= number
      ]
 
 
