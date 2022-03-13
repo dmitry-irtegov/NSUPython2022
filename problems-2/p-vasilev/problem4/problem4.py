@@ -14,29 +14,28 @@ def main():
 
         pi = pi.replace('\n', '')
         pi = pi.replace('.', '')
+        while True:
+            print('Enter sequence to search for.')
 
-        print('Enter sequence to search for.')
-
-        try:
             inp = input()
-        except KeyboardInterrupt:
-            print()
-            exit(0)
 
-        res = []
-        t = 0
-        while inp in pi[t:]:
-            t = pi.find(inp, t)
-            res.append(t)
-            t += 1
+            res = []
+            t = 0
+            count = 0
+            while inp in pi[t:]:
+                t = pi.find(inp, t)
+                if len(res) < 5:
+                    res.append(t)
+                count += 1
+                t += 1
 
-        print(f'Found {len(res)} result{"s" if len(res) != 1 else ""}.')
-        if len(res) > 0:
-            print(f'Positions:', *res[:5], '...' if len(res) > 5 else '')
+            print(f'Found {count} result{"s" if count != 1 else ""}.')
+            if len(res) > 0:
+                print(f'Position{"s" if count != 1 else ""}:', *res[:5], '...' if count > 5 else '')
 
     except Exception as e:
         print('During execution an exception was raised:', file=sys.stderr)
-        print(f'{type(e).__name__}: {e}')
+        print(f'{type(e).__name__}: {e}', file=sys.stderr)
     except KeyboardInterrupt:
         print()
 
