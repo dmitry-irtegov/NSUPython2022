@@ -1,65 +1,51 @@
 #!/usr/bin/env python3
 import sys
-from typing import Dict, List
-import re
+from io import StringIO
+from typing import List
 
 
-def rev_dict(d: Dict[str, List[str]]) -> Dict[str, List[str]]:
-    """Reverses a dictionary (like the one in the example, not a `dict`)."""
-    res = {}
-    for i in [a for b in d.values() for a in b]:
-        res[i] = []
-    for i in d.items():
-        for j in i[1]:
-            res[j].append(i[0])
-    return res
+def parse_a_singular_line_of_text(s: str) -> (str, List[str]):
+    """Parses the input string (a line (singular)) into a tuple of a word and its translations
+    (see example dictionary for reference)"""
+    s_split = s.split('-')
 
+    if len(s_split) != 2:
+        raise ValueError('Lines have to have the word and its translations separated by "-" symbol')
 
-def parse_dict(s: str) -> Dict[str, List[str]]:
-    """Parses a dictionary."""
-    res = {}
-    for i in [j.split('-') for j in s.splitlines()]:
-        try:
-            key = i[0].strip()
-            val = [k.strip() for k in i[1].split(',')]
-        except IndexError:
-            raise ValueError('Lines have to have the word and its translations separated by "-" symbol')
-        if not key.isalpha() or False in [i.isalpha() for i in val]:
-            raise ValueError('Words have to be alphabetic and non-empty')
-        res[key] = val
-    return res
+    key, val = s_split
+    key = key.strip()
+    val = [i.strip() for i in val.split(',')]
 
+    if not key.isalpha() or False in [i.isalpha() for i in val]:
+        raise ValueError('Words have to be alphabetic and non-empty')
 
-def problem2(s: str):
-    """Prints a Latin-English dictionary given an English-Latin dictionary."""
-    res = rev_dict(parse_dict(s))
-    for i in sorted(res.keys()):
-        print(f'{i} - ', end='')
-        print(*sorted(res[i]), sep=', ')
+    return key, val
 
 
 def main():
     try:
-
-        default_str = "apple - malum, pomum, popula\nfruit - baca, bacca, popum\npunishment - malum, multa"
-        print('Enter input string by string, leave empty for default input:')
+        default_str = StringIO("apple - malum, pomum, popula\nfruit - baca, bacca, popum\npunishment - malum, multa")
+        print('Enter a name of a file that contains a dictionary, leave empty for default input:')
 
         input_str = input()
+        res = {}
 
-        if input_str == '':
-            input_str = default_str
-        else:
-            while True:
-                print('Enter the next string, leave empty to end input:')
-                t = input()
-                if t == '':
-                    break
-                input_str += '\n' + t
-        problem2(input_str)
+        with default_str if input_str == '' else open(input_str) as file:
+            for line in file:
+                a, b = parse_a_singular_line_of_text(line)
+                for i in b:
+                    if i not in res.keys():
+                        res[i] = []
+                for i in b:
+                    res[i].append(a)
+
+        for i in sorted(res.keys()):
+            print(f'{i} - ', end='')
+            print(*sorted(res[i]), sep=', ')
 
     except Exception as e:
         print('During execution an exception was raised:', file=sys.stderr)
-        print(f'{type(e).__name__}: {e}')
+        print(f'{type(e).__name__}: {e}', file=sys.stderr)
     except KeyboardInterrupt:
         print()
 
