@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 import sys
+import math
 
 
 def problem1(n):
     """Returns all the Pythagorean triples from numbers not bigger than the input."""
-    rng = range(1, n + 1)
-    return [(x, y, z)
-            for x in rng
-            for y in rng
-            for z in rng
-            if (x ** 2 + y ** 2 == z ** 2 and x < y)]
+    return [(x, y, int(math.sqrt(x * x + y * y)))
+            for x in range(1, n + 1)
+            for y in range(x, n + 1)
+            if math.ceil(math.sqrt(x * x + y * y)) == math.floor(math.sqrt(x * x + y * y))
+            and int(math.sqrt(x * x + y * y)) <= n]
 
 
 def main():
@@ -23,8 +23,8 @@ def main():
             print(i)
 
     except Exception as e:
-        print('During execution an exception was raised:')
-        print(f'{type(e).__name__}: {e}')
+        print('During execution an exception was raised:', file=sys.stderr)
+        print(f'{type(e).__name__}: {e}', file=sys.stderr)
     except KeyboardInterrupt:
         print()
 
