@@ -4,6 +4,7 @@ This module implements solution for problem 1 in Problems-2 [1]
 [1]: http://parallels.nsu.ru/~fat/Python/problems-2.pdf
 """
 import math
+import sys
 
 
 def get_pythagorean_triples(number):
@@ -27,12 +28,12 @@ if __name__ == '__main__':
             print(get_pythagorean_triples(num))
             break
         except ValueError as e:
-            print(f"Invalid value: \n{e}")
+            print(f"Invalid value: \n{e}", file=sys.stderr)
         except KeyboardInterrupt:
             print()
             exit(0)
-        except EOFError as e:
+        except EOFError:
             print()
             exit(0)
         except Exception as e:
-            print(f"{e}\nTry again")
+            print(f"{e}\nTry again", file=sys.stderr)
