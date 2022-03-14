@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import pytest
+import unittest
 
 
 def cumulativeSums(list):
@@ -17,19 +17,21 @@ if __name__ == '__main__':
         list = map(int, in_s.split())
         result = cumulativeSums(list)
         print('Result is:', result)
+        print('Tests:', unittest.main())
     except ValueError:
         print('Please enter integers. Try again.')
 
 
-class TestSums():
+class TestSums(unittest.TestCase):
     def test_1(self):
-        assert cumulativeSums([1, 3, 5, 7]) == [0, 1, 4, 9, 16]
+        self.assertEqual(cumulativeSums([1, 3, 5, 7]), [0, 1, 4, 9, 16])
+
 
     def test_2(self):
-        assert cumulativeSums([0]) == [0, 0]
+        self.assertEqual(cumulativeSums([0]), [0, 0])
 
     def test_3(self):
-        assert cumulativeSums([]) == [0]
+        self.assertEqual(cumulativeSums([]), [0])
 
     def test_4(self):
-        assert cumulativeSums(range(1, 18)) == [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105, 120, 136, 153]
+        self.assertEqual(cumulativeSums(range(1, 18)), [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105, 120, 136, 153])
