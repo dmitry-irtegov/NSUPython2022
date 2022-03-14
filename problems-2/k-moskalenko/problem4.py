@@ -48,6 +48,9 @@ if __name__ == '__main__':
     while True:
         try:
             substr = get_input()
+        except EOFError:
+            print('EOF received, exiting.')
+            sys.exit()
         except Exception as e:
             print(f'User input failed: {e}\n', file=sys.stderr)
             continue
