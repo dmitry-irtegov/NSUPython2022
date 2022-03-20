@@ -10,6 +10,12 @@ if __name__ == "__main__":
     except ValueError:
         print(f"You provided not an integer", file=sys.stderr)
         sys.exit(1)
+    except KeyboardInterrupt:
+        print(f"Keyboard interrupt happened", file=sys.stderr)
+        sys.exit(1)
+    except EOFError:
+        print(f"EOF reached", file=sys.stderr)
+        sys.exit(1)
 
     try:
         print(*collatz(n), sep=" -> ")
