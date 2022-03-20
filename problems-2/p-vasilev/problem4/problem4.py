@@ -4,41 +4,45 @@
 # This will lead to this solution being "off" exactly by 1 (if input is something like 3141, 0 is included)
 # i.e. input of "1415" will print "1 6955 ..." instead of "0 6954 ..." , etc
 import sys
+import unittest
 
 
-def main():
-    try:
-        # pi.txt has to be in the same directory
-        with open('pi.txt') as file:
-            pi = file.read(-1)
+def prepare_pi():
+    # pi.txt has to be in the same directory
+    with open('pi.txt') as file:
+        pi = file.read(-1)
 
-        pi = pi.replace('\n', '')
-        pi = pi.replace('.', '')
-        while True:
-            print('Enter sequence to search for.')
+    pi = pi.replace('\n', '')
+    pi = pi.replace('.', '')
+    return pi
 
-            inp = input()
 
-            res = []
-            t = 0
-            count = 0
-            while inp in pi[t:]:
-                t = pi.find(inp, t)
-                if len(res) < 5:
-                    res.append(t)
-                count += 1
-                t += 1
+def pi_find(inp, pi):
+    res = []
+    t = 0
+    count = 0
+    while inp in pi[t:]:
+        t = pi.find(inp, t)
+        if len(res) < 5:
+            res.append(t)
+        count += 1
+        t += 1
+    return count, res
 
-            print(f'Found {count} result{"s" if count != 1 else ""}.')
-            if len(res) > 0:
-                print(f'Position{"s" if count != 1 else ""}:', *res[:5], '...' if count > 5 else '')
 
-    except Exception as e:
-        print('During execution an exception was raised:', file=sys.stderr)
-        print(f'{type(e).__name__}: {e}', file=sys.stderr)
-    except KeyboardInterrupt:
-        print()
+class Problem4Tests(unittest.TestCase):
+    def setUp(self):
+        self.pi = prepare_pi()
+
+    def test_zero(self):
+        self.assertEqual(pi_find('1234123412341234', self.pi)[0], 0)
+
+    def test_position_0(self):
+        self.assertIn(0, pi_find('31415', self.pi)[1])
+
+    def test_position_1(self):
+        self.assertIn(1, pi_find('14159', self.pi)[1])
 
 
 if __name__ == '__main__':
-    main()
+    unittest.main(verbosity=2)
