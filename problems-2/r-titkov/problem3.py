@@ -10,13 +10,21 @@ def getDirFiles(path):
 	:param path: path to directory
 	"""
 
-	files = [s for s in os.listdir(path) 
-		if os.path.isfile(os.path.join(path, s))
-	]
-	files_and_sizes = [
-		(file, os.stat(os.path.join(path, file)).st_size) 
-		for file in files
-	]
+	try:
+		files = [s for s in os.listdir(path) 
+			if os.path.isfile(os.path.join(path, s))
+		]
+	except Exception as e:
+		sys.exit(f'Error occurred with listing directory: {e}')
+
+	try:
+		files_and_sizes = [
+			(file, os.stat(os.path.join(path, file)).st_size) 
+			for file in files
+		]
+	except Exception as e:
+		sys.exit(f'An error occurred while getting statistics: {e}')
+
 	files_and_sizes.sort(key=lambda elem: (-elem[1], elem[0]))
 	for filename, size in files_and_sizes:
 		print(f'{filename} - {size} bytes')
@@ -26,11 +34,5 @@ if __name__ == '__main__':
 	parser = ArgumentParser()
 	parser.add_argument("path", type=str, help="Enter path to the directory")
 	args = parser.parse_args()
-	try:
-		getDirFiles(args.path)
-	except NotADirectoryError as e:
-		print(f'NotADirectoryError occurred for "{e.filename}": {e.strerror}', file=sys.stderr)
-	except FileNotFoundError as e:
-		print(f'FileNotFoundError occurred for "{e.filename}": {e.strerror}', file=sys.stderr)
-	except OSError as e:
-		print(f'OSError occurred for "{e.filename}": {e.strerror}', file=sys.stderr)
+
+	getDirFiles(args.path)
