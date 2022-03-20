@@ -1,3 +1,4 @@
+import sys
 import unittest
 
 
@@ -19,18 +20,27 @@ class CutterTestMethods(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    try:
-        input_array = [int(item) for item in input("Enter the list items: ").split()]
-        input_bottom = int(input("Enter bottom border: "))
-        input_upper = int(input("Enter upper border: "))
-        result = cutter(input_array, input_bottom, input_upper)
-        print(result)
-    except ValueError as e:
-        print("Error:", e)
-    except KeyboardInterrupt:
-        print("Error! Please enter valid integer numbers.")
+
+    if "--unittest" in sys.argv:
+        suite = unittest.TestLoader().loadTestsFromTestCase(CutterTestMethods)
+        unittest.TextTestRunner(verbosity=2).run(suite)
         exit()
-    except IOError:
-        print("Error! Please enter valid integer numbers.")
-    except Exception:
-        print("Unexpected error!")
+
+    while True:
+        try:
+            input_array = [int(item) for item in input("Enter the list items without commas: ").split()]
+            input_bottom = int(input("Enter bottom border: "))
+            input_upper = int(input("Enter upper border: "))
+            result = cutter(input_array, input_bottom, input_upper)
+            print(result)
+            exit()
+        except ValueError as e:
+            print("Error! Please enter valid integer numbers: ", e)
+        except KeyboardInterrupt:
+            print("Keyboard interrupt")
+            exit()
+        except IOError:
+            print("Error! Please enter valid integer numbers.")
+        except Exception:
+            print("Unexpected error!")
+            exit()
