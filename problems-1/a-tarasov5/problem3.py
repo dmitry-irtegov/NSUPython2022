@@ -1,24 +1,17 @@
 #!/usr/bin/env python3
+import sys
 
-def collatz(num):
-    """
-    This function return all steps collatz hypothesis before it reaches 1 (included)
-    :param num: start number
-    :return: list of all computed collatz steps
-    """
-
-    result = []
-    while num != 1:
-        result.append(num)
-        if num % 2 == 0:
-            num //= 2
-        else:
-            num = num * 3 + 1
-    result.append(1)
-    return result
-
+from problem3_impl import collatz
 
 if __name__ == "__main__":
     print("Enter number to check collatz hypothesis")
-    n = int(input())
-    print(*collatz(n), sep=" -> ")
+    try:
+        n = int(input())
+    except ValueError:
+        print(f"You provided not an integer", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        print(*collatz(n), sep=" -> ")
+    except ValueError as e:
+        print(f"{e}")
