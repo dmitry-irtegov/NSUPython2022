@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-import sys
+
+import unittest
 from io import StringIO
-from typing import List
+from typing import List, IO, Dict
 
 
 def parse_a_singular_line_of_text(s: str) -> (str, List[str]):
     """Parses the input string (a line (singular)) into a tuple of a word and its translations
     (see example dictionary for reference)"""
+    s = s.lower()
     s_split = s.split('-')
 
     if len(s_split) != 2:
@@ -22,34 +24,63 @@ def parse_a_singular_line_of_text(s: str) -> (str, List[str]):
     return key, val
 
 
-def main():
-    try:
-        default_str = StringIO("apple - malum, pomum, popula\nfruit - baca, bacca, popum\npunishment - malum, multa")
-        print('Enter a name of a file that contains a dictionary, leave empty for default input:')
+def reverse_dictionary_from_file(file: IO) -> Dict[str, List[str]]:
+    """Reverses an English-Latin dictionary contained in a file-like object"""
+    res: Dict[str, List[str]] = {}
 
-        input_str = input()
-        res = {}
+    for line in file:
+        a, b = parse_a_singular_line_of_text(line)
 
-        with default_str if input_str == '' else open(input_str) as file:
-            for line in file:
-                a, b = parse_a_singular_line_of_text(line)
-                for i in b:
-                    if i not in res.keys():
-                        res[i] = []
-                for i in b:
-                    res[i].append(a)
+        for i in b:
+            if i not in res.keys():
+                res[i] = []
+        for i in b:
+            res[i].append(a)
 
-        for i in sorted(res.keys()):
-            print(f'{i} - ', end='')
-            print(*sorted(res[i]), sep=', ')
+    res = {i: sorted(res[i]) for i in res}
 
-    except Exception as e:
-        print('During execution an exception was raised:', file=sys.stderr)
-        print(f'{type(e).__name__}: {e}', file=sys.stderr)
-    except KeyboardInterrupt:
-        print()
+    return res
+
+
+class Problem2Tests(unittest.TestCase):
+    def test_example(self):
+        input_str = StringIO("apple - malum, pomum, popula\nfruit - baca, bacca, popum\npunishment - malum, multa")
+        self.assertEqual(reverse_dictionary_from_file(input_str),
+                         {'baca': ['fruit'],
+                          'bacca': ['fruit'],
+                          'malum': ['apple', 'punishment'],
+                          'multa': ['punishment'],
+                          'pomum': ['apple'],
+                          'popula': ['apple'],
+                          'popum': ['fruit']}
+                         )
+
+    def test_empty(self):
+        input_str = StringIO('')
+        self.assertEqual(reverse_dictionary_from_file(input_str), {})
+
+    def test_non_alpha_input(self):
+        self.assertRaises(ValueError, reverse_dictionary_from_file, StringIO('42 - 19, 20'))
+
+    def test_not_separated_input(self):
+        self.assertRaises(ValueError, reverse_dictionary_from_file, StringIO('apple malum, popum'))
+
+    def test_too_much_separated(self):
+        self.assertRaises(ValueError, reverse_dictionary_from_file, StringIO('apple - malum - popum'))
+
+    def test_double_comma(self):
+        self.assertRaises(ValueError, reverse_dictionary_from_file, StringIO('apple - malum,, popum'))
+
+    def test_no_comma(self):
+        self.assertRaises(ValueError, reverse_dictionary_from_file, StringIO('apple - malum popum'))
+
+    def test_no_translation(self):
+        self.assertRaises(ValueError, reverse_dictionary_from_file, StringIO('apple - '))
+
+    def test_no_word(self):
+        self.assertRaises(ValueError, reverse_dictionary_from_file, StringIO(' - malum, popum'))
 
 
 if __name__ == '__main__':
-    main()
+    unittest.main(verbosity=2)
 
