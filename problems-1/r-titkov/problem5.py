@@ -30,16 +30,20 @@ def factorize(number):
 
 
 if __name__ == '__main__':
-	try:
-		print("Enter a number to factorize: ", end='')
-		number = int(input())
-		if number < 1:
-			sys.exit("Number must be greater than zero")
+	print("Enter a number to factorize: ", end='')
 
-		print(factorize(number))
+	try:
+		number = int(input())
 	except KeyboardInterrupt:
-		sys.exit("\nKeyboardInterrupt occured")
+		print("\nKeyboardInterrupt received")
+		sys.exit()
 	except EOFError:
-		sys.exit("\nEOFError occured")
-	except OSError as e:
-		sys.exit(f"\nEOFError occured: {e.strerror}")
+		print("\nEOFError received")
+		sys.exit()
+	except Exception as e:
+		sys.exit(f"Error occured: {e}")
+
+	if number < 1:
+		sys.exit("Number must be greater than zero")
+
+	print(factorize(number))
