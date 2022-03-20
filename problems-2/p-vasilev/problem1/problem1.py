@@ -16,10 +16,6 @@ def problem1(n: int) -> List[Tuple[int, int, int]]:
     return res
 
 
-def main():
-    pass
-
-
 class Problem1Tests(unittest.TestCase):
     def test_simple(self):
         self.assertEqual(problem1(3), [])
