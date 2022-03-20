@@ -6,7 +6,8 @@ def prime_factors(n):
     """
     Return prime factors of n
     :param n: positive integer
-    :returns: list of pairs [p,k] where p - prime number, k - its frequency    """
+    :returns: list of pairs [p,k] where p - prime number, k - its frequency
+    """
     i = 2
     factors = []
     while i * i <= n:
