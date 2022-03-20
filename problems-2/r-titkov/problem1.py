@@ -1,3 +1,5 @@
+import sys
+
 def get_pythagorean_triples(limit):
 	"""
 	Return Pythagorean triples where all numbers are at most limit
@@ -13,5 +15,17 @@ def get_pythagorean_triples(limit):
 	]
 
 if __name__ == '__main__':
-	number = int(input())
+	try:
+		number = int(input())
+	except (ValueError, TypeError):
+		sys.exit('The input must be a single integer')
+	except EOFError as e:
+		print('EOF received')
+		sys.exit()
+	except KeyboardInterrupt as e:
+		print('KeyboardInterrupt received')
+		sys.exit()
+	except Exception as e:
+		sys.exit(f'Error occured: {e}')
+
 	print(get_pythagorean_triples(number))
