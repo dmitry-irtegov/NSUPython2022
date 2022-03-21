@@ -2,7 +2,7 @@
 
 from math import sqrt
 import unittest
-
+import sys
 
 def triplets(maxNumber: int) -> list:
     return [
@@ -14,12 +14,14 @@ def triplets(maxNumber: int) -> list:
 
 
 if __name__ == '__main__':
-    print("Number: ", end="")
-    number = input()
-    while not number.isdigit():
-        print("Warning: Incorrect value. Please, enter an integer number", end=": ")
-        number = input()
-    number = int(number)
+    while True:
+        try:
+            print("Number: ", end="")
+            number = int(input())
+            break
+        except ValueError as e:
+            print('Input is not integer. Try again.', file=sys.stderr)
+
     print(f"Result: {triplets(number)}")
 
 
