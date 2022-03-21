@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import unittest
+import sys
 
 
 def cumulativeSums(list):
@@ -12,15 +13,16 @@ def cumulativeSums(list):
 
 
 if __name__ == '__main__':
-    in_s = input('Enter the numbers: ')
-    try:
-        list = map(int, in_s.split())
-        result = cumulativeSums(list)
-        print('Result is:', result)
-        print('Tests:', unittest.main())
-    except ValueError:
-        print('Please enter integers. Try again.')
-
+    while True:
+        try:
+            in_s = input('Enter the numbers: ')
+            list = map(int, in_s.split())
+            result = cumulativeSums(list)
+            print('Result is:', result)
+            break
+        except ValueError as e:
+            print('Input is not integers. ', sys.stderr)
+    print('Tests:', unittest.main())
 
 class TestSums(unittest.TestCase):
     def test_1(self):
