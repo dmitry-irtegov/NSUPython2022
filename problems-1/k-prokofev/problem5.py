@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-import pytest
+import unittest
+import sys
 
 
 def factor(number):
     result = []
     multiplier = 2
+    if not isinstance(number, int):
+        return []
+
     while multiplier * multiplier <= number:
         pow = 0
         while number % multiplier == 0:
@@ -20,23 +24,29 @@ def factor(number):
 
 
 if __name__ == '__main__':
-    try:
-        a = int(input('Enter number: '))
-        result = factor(a)
-        print(result)
-    except ValueError as e:
-        print('Please enter an integer. Try again.', e)
+    while True:
+        try:
+            a = int(input('Enter number: '))
+            result = factor(a)
+            print(result)
+            break
+        except ValueError as e:
+            print('Please enter an integer. ', sys.stderr)
+        print('Tests:', unittest.main())
 
 
-class Factor:
+class TestFactor(unittest.TestCase):
+    def test_0(self):
+        self.assertEqual(factor(0), [])
+
     def test_1(self):
-        assert factor(12) == [[2, 2], [3, 1]]
+        self.assertEqual(factor(1), [[1, 1]])
 
     def test_2(self):
-        assert factor(0) == []
+        self.assertEqual(factor('someText'), [])
 
     def test_3(self):
-        assert factor(1) == [1, 1]
+        self.assertEqual(factor(1000000000000), [[2, 12], [5, 12], [1, 1]])
 
     def test_4(self):
-        assert factor(13) == [13, 1]
+        self.assertEqual(factor(-100), [])
