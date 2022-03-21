@@ -2,12 +2,19 @@ import sys
 
 def factorize(number):
 	"""
-	The function takes a number to factorize and
+	The function takes an integer to factorize and
 	returns the factorization for the given number
 
 	:param number: The number to factorize
+	:type number: int
 	:return: The factorization for the given number
 	"""
+
+	if not isinstance(number, int):
+		raise ValueError("Number must be an integer")
+
+	if number < 1:
+		raise ValueError("Number must be greater than zero")
 
 	if number == 1:
 		return [[1, 1]]
@@ -43,7 +50,7 @@ if __name__ == '__main__':
 	except Exception as e:
 		sys.exit(f"Error occured: {e}")
 
-	if number < 1:
-		sys.exit("Number must be greater than zero")
-
-	print(factorize(number))
+	try:
+		print(factorize(number))
+	except Exception as e:
+		sys.exit(f"Error occured: {e}")
