@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import unittest
+import sys
 
 
 def collatz(number: int):
@@ -15,12 +16,14 @@ def collatz(number: int):
 
 
 if __name__ == '__main__':
-    try:
-        a = int(input('Enter number: '))
-        result = collatz(a)
-        print(result)
-    except ValueError as e:
-        print('Please enter an integer. Try again.', e)
+    while True:
+        try:
+            a = int(input('Enter number: '))
+            result = collatz(a)
+            print(result)
+            break
+        except ValueError as e:
+            print('Please enter an integer. Try again.', sys.stderr)
     unittest.main()
 
 
