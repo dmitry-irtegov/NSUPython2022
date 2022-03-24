@@ -15,7 +15,7 @@ def getDirFiles(path):
 			if os.path.isfile(os.path.join(path, s))
 		]
 	except Exception as e:
-		sys.exit(f'Error occurred with listing directory: {e}')
+		raise type(e)("Error occurred while listing directory: " + str(e))
 
 	try:
 		files_and_sizes = [
@@ -23,7 +23,7 @@ def getDirFiles(path):
 			for file in files
 		]
 	except Exception as e:
-		sys.exit(f'An error occurred while getting statistics: {e}')
+		raise type(e)("Error occurred while getting file statistics: " + str(e))
 
 	files_and_sizes.sort(key=lambda elem: (-elem[1], elem[0]))
 	for filename, size in files_and_sizes:
@@ -35,4 +35,7 @@ if __name__ == '__main__':
 	parser.add_argument("path", type=str, help="Enter path to the directory")
 	args = parser.parse_args()
 
-	getDirFiles(args.path)
+	try:
+		getDirFiles(args.path)
+	except Exception as e:
+		sys.exit(e)
