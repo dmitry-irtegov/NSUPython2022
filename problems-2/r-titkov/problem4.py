@@ -1,38 +1,79 @@
 import sys
 
-"""
-This module takes a sequence of digits and outputs
-the number of occurrences of this sequence in the pi.txt file
-"""
 
-if __name__ == '__main__':
-	try:
-		with open("pi.txt") as file:
-			file.read(2)
-			pi_number = file.read().replace('\n', '')
-	except IsADirectoryError as e:
-		sys.exit(f'IsADirectoryError occurred for "{e.filename}": {e.strerror}')
-	except FileNotFoundError as e:
-		sys.exit(f'FileNotFoundError occurred for "{e.filename}": {e.strerror}')
-	except OSError as e:
-		sys.exit(f'OSError occurred for "{e.filename}": {e.strerror}')
+def load_pi_number(filename):
+	"""
+	The function load pi.txt file and return it's content
 
-	print("Enter sequence to search for.")
-	sequence = input()
+	:return: pi.txt file content
+	"""
+	with open(filename) as file:
+		file.read(2)
+		pi_number = file.read().replace('\n', '')
 
-	if len(sequence) == 0:
-		sys.exit("The sequence must be at least one character long")
+	return pi_number
 
-	sequences_found = 0
+
+def find_sequences(pi_number, sequence):
+	"""
+	The function find all occurrences of "sequence" in "pi_number" string
+	and return all occurences and occurences count
+
+	:param pi_number: string content where the search will be performed
+	:param sequence: int or string which will be searhed in the pi_number
+	:return sequences: indexes of all occurrences
+	:return sequences_count: count of occurrences
+	"""
+	if not type(pi_number) is str:
+		raise ValueError("Content input error: The 'pi_number' parameter must be a string")
+
+	if isinstance(sequence, int):
+		sequence = str(sequence)
+	elif not isinstance(sequence, str) or not sequence.isdigit():
+		raise ValueError("User input error: The input must be a string sequence of digits")
+
+	sequences_count = 0
 	sequences = []
 	current_position = pi_number.find(sequence, 0)
 	while current_position != -1:
-		if sequences_found < 5:
+		if sequences_count < 5:
 			sequences.append(str(current_position))
 
-		sequences_found += 1
+		sequences_count += 1
 		current_position = pi_number.find(sequence, current_position + 1)
 
-	print(f'Found {sequences_found} result{"s" if sequences_found > 1 else ""}.')
-	if sequences_found > 0:
-		print(f'Positions: {" ".join(sequences)} {"..." if sequences_found > 5 else ""}')
+	return sequences, sequences_count
+
+
+if __name__ == '__main__':
+	try:
+		pi_number = load_pi_number("pi.txt")
+	except OSError as e:
+		sys.exit(f'While loading {e.filename} file {type(e)} occurred: {e.strerror}')
+
+	while True:
+		print("\nEnter sequence to search for.")
+		print('< ', end='')
+		try:
+			sequence = input()
+		except EOFError:
+			print('EOFError received, exiting...')
+			sys.exit()
+		except KeyboardInterrupt:
+			print('KeyboardInterrupt received, exiting...')
+			sys.exit()
+		except OSError as e:
+			print(f'{type(e)} occured while reading user input: {e.strerror}')
+			continue
+
+		try:
+			sequences, sequences_count = find_sequences(pi_number, sequence)
+		except Exception as e:
+			print(e)
+			continue
+
+		print(f'Found {sequences_count} result{"s" if sequences_count > 1 else ""}.')
+		if sequences_count > 0:
+			print(f'Positions: {" ".join(sequences)} {"..." if sequences_count > 5 else ""}')
+		else:
+			print('Nothing found')
