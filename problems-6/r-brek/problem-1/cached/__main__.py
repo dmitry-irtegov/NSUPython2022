@@ -1,4 +1,8 @@
 import unittest
+import sys
+import inspect
+import time
+from time import sleep
 from .cached_impl import cached
 
 class CachedTest(unittest.TestCase):
@@ -34,5 +38,70 @@ class CachedTest(unittest.TestCase):
             some_function('1', '2', '3', three='four', one='two')
         )
 
+def run_benchmark():
+    print("Running demo benchmark")
+
+    @cached
+    def dummy_long_computation(x):
+        sleep(5)
+        return x
+    
+    print("Running the following function twice with the same arg: ")
+    print(inspect.getsource(dummy_long_computation))
+
+    print("Computing result for x=1 for the first time:")
+    print(dummy_long_computation(1))
+
+    print("Computing result for x=1 for the second time:")
+    print(dummy_long_computation(1))
+
+    print("Running actual benchmark on fibs")
+    print("Trying to get fibs from 1 to 15 using two following funcs:")
+
+    @cached
+    def fibs_cached(x):
+        if x == 0: return 0
+        if x == 1: return 1
+        return fibs_cached(x - 1) + fibs_cached(x - 2)
+
+    def fibs_no_cache(x):
+        if x == 0: return 0
+        if x == 1: return 1
+        return fibs_no_cache(x - 1) + fibs_no_cache(x - 2)
+
+    print(inspect.getsource(fibs_cached))
+    print(inspect.getsource(fibs_no_cache))
+
+    print("Computing fibs for every in range 30-37 NO CACHE")
+    ex_time = time.time()
+    for i in range(30, 37):
+        print(f"fibs({i}) = {fibs_no_cache(i)}")
+    print(f"Execution took {time.time() - ex_time}")
+
+    ex_time = time.time()
+    print("Computing fibs for every in range 30-37 WITH CACHE")
+    for i in range(30, 37):
+        print(f"fibs({i}) = {fibs_cached(i)}")
+    print(f"Execution took {time.time() - ex_time}")
+
+    print("Benchmark finished")
+
 if __name__ == "__main__":
-    unittest.main()
+    help_message = "Provide no args to run tests, --benchmark to run benchmark"
+    bad_usage_message = "Bad usage, use -h"
+    if len(sys.argv) > 2:
+        print(bad_usage_message, file=sys.stderr)
+        exit(1)
+    if len(sys.argv) == 2:
+        arg = sys.argv[1]
+        if arg == "-h":
+            print(help_message)
+            exit(0)
+        elif arg == "--benchmark":
+            run_benchmark()
+            exit(0)
+        else:
+            print(bad_usage_message, file=sys.stderr)
+            exit(1)
+    else:
+        unittest.main()
