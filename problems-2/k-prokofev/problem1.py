@@ -9,7 +9,7 @@ def triplets(maxNumber: int) -> list:
         [x, y, int(sqrt(x ** 2 + y ** 2))]
         for x in range(1, maxNumber)
         for y in range(x + 1, maxNumber)
-        if sqrt(x ** 2 + y ** 2) <= maxNumber and sqrt(x ** 2 + y ** 2) % 1 == 0
+        if sqrt(x ** 2 + y ** 2) <= maxNumber and sqrt(x ** 2 + y ** 2).is_integer()
     ]
 
 
@@ -23,6 +23,7 @@ if __name__ == '__main__':
             print('Input is not integer. Try again.', file=sys.stderr)
 
     print(f"Result: {triplets(number)}")
+    unittest.main()
 
 
 class TestTriplets(unittest.TestCase):
