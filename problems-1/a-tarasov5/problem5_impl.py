@@ -33,6 +33,11 @@ class TestPrimeFactors(unittest.TestCase):
     def test_edge_cases(self):
         self.assertCountEqual(prime_factors(31 * 31), [[31, 2]])
         self.assertCountEqual(prime_factors(1), [])
+        self.assertCountEqual(prime_factors(-131), [])
+
+    def test_errors(self):
+        self.assertRaises(TypeError, prime_factors, None)
+        self.assertRaises(TypeError, prime_factors, "ABOBA")
 
 
 if __name__ == '__main__':
