@@ -26,14 +26,15 @@ def find_in_pi_file(string):
     :param string: number that you want to find in pi.txt
     :returns: six first positions of this substring
     """
-    filepath = "./pi.txt"
-    with open(filepath, "r") as file:
-        digits = "".join(file.read()[2:].split('\n'))
+    if not hasattr(find_in_pi_file, "digits"):
+        filepath = "./pi.txt"
+        with open(filepath, "r") as file:
+            digits = "".join(file.read()[2:].split('\n'))
+
     return find_many(digits, string)
 
 
 class TestPiFinder(unittest.TestCase):
-
     def test_simple_cases(self):
         self.assertEqual(len(find_in_pi_file("123")), 4185)
         self.assertListEqual(find_in_pi_file("123")[:5], [1923, 2937, 2975, 3891, 6547])
@@ -48,6 +49,10 @@ class TestPiFinder(unittest.TestCase):
     def test_last_subseq(self):
         digits_count = 4194303
         print(digits_count - 7 in find_in_pi_file("5841350")[:5])
+
+    def test_errors(self):
+        self.assertRaises(TypeError, find_in_pi_file, 123)
+        self.assertRaises(TypeError, find_in_pi_file, None)
 
 
 if __name__ == "__main__":
