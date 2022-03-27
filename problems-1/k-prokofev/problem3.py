@@ -24,6 +24,14 @@ if __name__ == '__main__':
             break
         except ValueError as e:
             print('Please enter an integer. Try again.', sys.stderr)
+        except KeyboardInterrupt:
+            print("\nKeyboardInterrupt received")
+            sys.exit()
+        except EOFError:
+            print("\nEOFError received")
+            sys.exit()
+        except Exception as e:
+            sys.exit(f"Error: {e}")
     unittest.main()
 
 
