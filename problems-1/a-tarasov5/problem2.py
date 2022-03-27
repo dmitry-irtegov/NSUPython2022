@@ -10,7 +10,6 @@ if __name__ == "__main__":
         print("Enter lower bound and upper bound")
 
         lower_bound, upper_bound = [int(elem) for elem in input().split()]
-
     except ValueError:
         print("You must provide only numbers divided by space", file=sys.stderr)
         exit(1)

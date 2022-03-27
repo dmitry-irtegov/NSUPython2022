@@ -23,11 +23,13 @@ class TestTrimNums(unittest.TestCase):
         self.assertListEqual(trim_nums([9, 9, 9, 9, 9, 9, 9], 3.2, 8.8), [8.8, 8.8, 8.8, 8.8, 8.8, 8.8, 8.8])
         self.assertListEqual(trim_nums([], 3.2, 8.8), [])
         self.assertListEqual(trim_nums(range(10), 4, 6), [4, 4, 4, 4, 4, 5, 6, 6, 6, 6])
+        self.assertListEqual(trim_nums(["1", "3", "3", "333", "4", "5", "7"], "4", "6"), ["4", "4", "4", "4", "4", "5", "6"])
 
     def test_errors(self):
         self.assertRaises(ValueError, trim_nums, [1, 5, 6], 4, 3.9)
         self.assertRaises(TypeError, trim_nums, [1, 5, ""], 4, 9)
         self.assertRaises(TypeError, trim_nums, None, 4, 9)
+        self.assertRaises(TypeError, trim_nums, [1, 2, 3, 4], "asss", 9)
 
 
 if __name__ == "__main__":
