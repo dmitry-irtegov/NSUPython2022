@@ -12,7 +12,8 @@ class PrimeNumsTest(unittest.TestCase):
         self.assertListEqual(prime_nums(0), [])
         self.assertListEqual(prime_nums(3), [2, 3])
         self.assertListEqual(prime_nums(12), [2, 3, 5, 7, 11])
-        self.assertListEqual(prime_nums(12), [2, 3, 5, 7, 11])
+        self.assertListEqual(prime_nums(13), [2, 3, 5, 7, 11,13])
+        self.assertListEqual(prime_nums(-333), [])
 
         self.assertEqual(prime_nums(500)[-1], 499)
         self.assertEqual(len(prime_nums(500)), 95)
