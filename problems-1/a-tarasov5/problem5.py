@@ -7,9 +7,8 @@ if __name__ == "__main__":
     try:
         num = int(input())
         print(prime_factors(num))
-    except (ValueError, EOFError):
+    except ValueError:
         print("You entered not number", file=sys.stderr)
         exit(1)
-    except KeyboardInterrupt:
-        print(f"Keyboard interrupt happened", file=sys.stderr)
-        sys.exit(1)
+    except (EOFError, KeyboardInterrupt):
+        sys.exit(0)
