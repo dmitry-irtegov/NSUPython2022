@@ -29,9 +29,9 @@ def find_in_pi_file(string):
     if not hasattr(find_in_pi_file, "digits"):
         filepath = "./pi.txt"
         with open(filepath, "r") as file:
-            digits = "".join(file.read()[2:].split('\n'))
+            find_in_pi_file.digits = "".join(file.read()[2:].split('\n'))
 
-    return find_many(digits, string)
+    return find_many(find_in_pi_file.digits, string)
 
 
 class TestPiFinder(unittest.TestCase):
