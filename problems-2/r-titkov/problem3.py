@@ -15,7 +15,8 @@ def getDirFiles(path):
 			if os.path.isfile(os.path.join(path, s))
 		]
 	except Exception as e:
-		raise type(e)("Error occurred while listing directory: " + str(e))
+		e.args = ("Error occurred while listing directory: ", ) + e.args
+		raise e.with_traceback(e.__traceback__)
 
 	try:
 		files_and_sizes = [
@@ -23,7 +24,8 @@ def getDirFiles(path):
 			for file in files
 		]
 	except Exception as e:
-		raise type(e)("Error occurred while getting file statistics: " + str(e))
+		e.args = ("Error occurred while listing directory: ", ) + e.args
+		raise e.with_traceback(e.__traceback__)
 
 	files_and_sizes.sort(key=lambda elem: (-elem[1], elem[0]))
 	for filename, size in files_and_sizes:
@@ -38,4 +40,4 @@ if __name__ == '__main__':
 	try:
 		getDirFiles(args.path)
 	except Exception as e:
-		sys.exit(e)
+		sys.exit(e.args[0] + str(e))
