@@ -8,6 +8,11 @@ def prime_factors(n):
     :param n: positive integer
     :returns: list of pairs [p,k] where p - prime number, k - its frequency
     """
+    if type(n) is not int:
+        raise TypeError(f"You must provide integers, but you provided {type(n)}")
+
+    if n < 0:
+        raise ValueError(f"You must provide positive integers, but you provided {n}")
     i = 2
     factors = []
     while i * i <= n:
@@ -38,7 +43,8 @@ class TestPrimeFactors(unittest.TestCase):
     def test_errors(self):
         self.assertRaises(TypeError, prime_factors, None)
         self.assertRaises(TypeError, prime_factors, "ABOBA")
-
+        self.assertRaises(TypeError, prime_factors, 3.3)
+        self.assertRaises(ValueError, prime_factors, -3)
 
 if __name__ == '__main__':
     unittest.main()
