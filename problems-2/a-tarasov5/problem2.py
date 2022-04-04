@@ -39,6 +39,6 @@ if __name__ == "__main__":
         exit(1)
 
     except Exception as e:
-        print(f"Unexpected error occurred")
-        print(e)
+        print(f"Unexpected error occurred", file=sys.stderr)
+        print(e, file=sys.stderr)
         exit(1)
