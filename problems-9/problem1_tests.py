@@ -3,7 +3,7 @@ from io import StringIO
 import time
 from problem1 import Timer
 
-class TestPythagoreanTriples(unittest.TestCase):
+class TestTimer(unittest.TestCase):
 	def test_1(self):
 		out = StringIO()
 
@@ -28,10 +28,22 @@ class TestPythagoreanTriples(unittest.TestCase):
 				time.sleep(1)
 				raise ValueError("Exception test")
 		except Exception as e:
-			return self.assertEqual(ValueError, type(e))
-			
-		return False
+			self.assertEqual(ValueError, type(e))
 
+	def test_4(self):
+		with Timer():
+			try:
+				time.sleep(1)
+				raise TypeError("Exception test")
+			except Exception as e:
+				self.assertEqual(TypeError, type(e))
+
+	def helper_test_5(self):
+		with Timer():
+			raise ValueError("Exception test")
+
+	def test_5(self):
+		self.assertRaises(ValueError, self.helper_test_5)
 
 if __name__ == '__main__':
 	unittest.main()
