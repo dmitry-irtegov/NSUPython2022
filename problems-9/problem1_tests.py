@@ -30,6 +30,7 @@ class TestTimer(unittest.TestCase):
 					raise ValueError("Exception test")
 			except ValueError:
 				return 'Exception received'
+			return None
 		
 		self.assertEqual('Exception received', helper_test_3())
 
@@ -41,6 +42,7 @@ class TestTimer(unittest.TestCase):
 					raise TypeError("Exception test")
 				except TypeError:
 					return 'Exception received'
+			return None
 
 		self.assertEqual('Exception received', helper_test_4())
 
