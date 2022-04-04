@@ -9,7 +9,6 @@ def parse_dict(s):
     for line in lines:
         if len(line.split("-")) != 2:
             raise ValueError("All lines in a dict must be like 'word - word1, word2, word3'")
-
         f, t = line.split("-")
         f = f.strip()
         words = [word.strip() for word in t.split(",")]
@@ -33,4 +32,13 @@ if __name__ == "__main__":
 
     except OSError as e:
         print(f"Error occurred while reading a file {file_path}", file=sys.stderr)
+        exit(1)
+
+    except ValueError as e:
+        print(e, file=sys.stderr)
+        exit(1)
+
+    except Exception as e:
+        print(f"Unexpected error occurred")
+        print(e)
         exit(1)
