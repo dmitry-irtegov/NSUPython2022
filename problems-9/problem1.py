@@ -6,7 +6,7 @@ class Timer(object):
 
 	def __exit__(self, exc_type, exc_val, exc_tb):
 		time_delta = time.time() - self.start_time
-		print(f'Took time: {round(time_delta, 3)} seconds')
+		print(f'Took time: {round(time_delta)} seconds')
 
 
 if __name__ == '__main__':
