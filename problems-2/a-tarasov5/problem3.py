@@ -6,7 +6,7 @@ FileStat = namedtuple('FileStat', ['name', 'size'])
 
 
 def files_stat_print(file_stats):
-    max_len = len(max(file_stats, key=lambda x: len(x.name)).name)
+    max_len = max([len(file_stat.name) for file_stat in file_stats])
     for file_stat in file_stats:
         print(f"{file_stat.name:{max_len}} {file_stat.size} bytes")
 
