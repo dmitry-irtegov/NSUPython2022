@@ -23,27 +23,33 @@ class TestTimer(unittest.TestCase):
 		self.assertEqual('Took time: 0 seconds', output)
 
 	def test_3(self):
-		try:
-			with Timer():
-				time.sleep(1)
-				raise ValueError("Exception test")
-		except Exception as e:
-			self.assertEqual(ValueError, type(e))
+		def helper_test_3():
+			try:
+				with Timer():
+					time.sleep(1)
+					raise ValueError("Exception test")
+			except ValueError:
+				return 'Exception received'
+		
+		self.assertEqual('Exception received', helper_test_3())
 
 	def test_4(self):
-		with Timer():
-			try:
-				time.sleep(1)
-				raise TypeError("Exception test")
-			except Exception as e:
-				self.assertEqual(TypeError, type(e))
+		def helper_test_4():
+			with Timer():
+				try:
+					time.sleep(1)
+					raise TypeError("Exception test")
+				except TypeError:
+					return 'Exception received'
 
-	def helper_test_5(self):
-		with Timer():
-			raise ValueError("Exception test")
+		self.assertEqual('Exception received', helper_test_4())
 
 	def test_5(self):
-		self.assertRaises(ValueError, self.helper_test_5)
+		def helper_test_5():
+			with Timer():
+				raise ValueError("Exception test")
+
+		self.assertRaises(ValueError, helper_test_5)
 
 if __name__ == '__main__':
 	unittest.main()
