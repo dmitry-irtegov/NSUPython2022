@@ -19,6 +19,8 @@ class Timer:
         self._file = file
 
     def __enter__(self):
+        if hasattr(self, '_end'):
+            delattr(self, '_end')
         self._start = perf_counter()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -28,8 +30,13 @@ class Timer:
 
     def elapsed_time(self):
         """Returns the elapsed time of the previous timer usage."""
-        if not (isinstance(self._start, float) and isinstance(self._end, float)):
-            raise RuntimeError('The timer has not ended yet.')
-        if self._start > self._end:
+        if not hasattr(self, '_start'):
+            raise RuntimeError('The timer has not been started yet.')
+
+        start = self._start
+        end = self._end if hasattr(self, '_end') else perf_counter()
+
+        if start > end:
             raise RuntimeError('The start time is greater than the end time.')
-        return self._end - self._start
+
+        return end - start
