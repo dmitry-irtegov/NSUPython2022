@@ -125,6 +125,7 @@ def main():
     except Exception as e:
         print(
             f"Error: unexpected error during execution: {e}", file=sys.stderr)
+        sys.exit(3)
 
 
 if __name__ == "__main__":
