@@ -37,6 +37,35 @@ class TranslateTests(unittest.TestCase):
             test_string, mapping, to_delete))
 
 
+class ArgsAssertionTest(unittest.TestCase):
+    def test_args_good(self):
+        frm = 'abc'
+        to = 'ijk'
+        assert_good_args(frm, to)
+    
+    def test_args_bad_length(self):
+        longer = 'abcdef'
+        shorter = 'zx'
+        with self.assertRaises(ArgsLengthError):
+            assert_good_args(longer, shorter)
+        with self.assertRaises(ArgsLengthError):
+            assert_good_args(shorter, longer)
+    
+    def test_args_bad_map(self):
+        frm = 'abcdefa'
+        to = 'x' * len(frm)
+        with self.assertRaises(ArgsDoubleMapError):
+            assert_good_args(frm, to)
+
+    def test_double_map_char(self):
+        frm = 'abcda'
+        to = 'x' * len(frm)
+        try:
+            assert_good_args(frm, to)
+            self.fail()
+        except ArgsDoubleMapError as e:
+            self.assertEqual('a', e.doubled_chr)
+
 def run_tests():
     sys.argv = [x for x in sys.argv if x != '--run-tests']
     unittest.main()
@@ -50,19 +79,20 @@ class TestsAction(argparse.Action):
         run_tests()
         sys.exit(0)
 
+class ArgsLengthError(ValueError):
+    pass
 
-def assert_good_args(args):
-    frm = args.frm
-    to = args.to
+class ArgsDoubleMapError(ValueError):
+    def __init__(self, doubled_chr):
+        self.doubled_chr = doubled_chr
+
+def assert_good_args(frm, to):
     if len(frm) != len(to):
-        print("Error: Lengths of supplied FRM and TO are not equal", file=sys.stderr)
-        sys.exit(1)
+        raise ArgsLengthError()
     frm_set = set()
     for frm_chr in frm:
         if frm_chr in frm_set:
-            print(
-                f"Error: can't map same letter twice: {frm_chr}", file=sys.stderr)
-            sys.exit(2)
+            raise ArgsDoubleMapError(frm_chr)
         frm_set.add(frm_chr)
 
 
@@ -79,14 +109,22 @@ def main():
         parser.add_argument(
             '--run-tests', help='Run tests instead of running the program', action=TestsAction)
         args = parser.parse_args()
-        assert_good_args(args)
+        assert_good_args(args.frm, args.to)
         iterable_stdin = iter(lambda: sys.stdin.read(1), '')
         result = translate(iterable_stdin, dict(zip(args.frm, args.to)), set(
             args.delete) if args.delete is not None else None)
         for x in result:
             print(x, end='')
+    except ArgsLengthError:
+        print("Error: Lengths of supplied FRM and TO are not equal", file=sys.stderr)
+        sys.exit(1)
+    except ArgsDoubleMapError as e:
+        print(
+            f"Error: FRM contains one letter twice: {e.doubled_chr}", file=sys.stderr)
+        sys.exit(2)
     except Exception as e:
-        print(f"Error: unexpected error during execution: {e}", file=sys.stderr)
+        print(
+            f"Error: unexpected error during execution: {e}", file=sys.stderr)
 
 
 if __name__ == "__main__":
