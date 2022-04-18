@@ -42,6 +42,12 @@ class StorageTest(unittest.TestCase):
         keys = list(storage.keys())
         self.assertEqual([1, 2, 3], keys)
 
+    def test_get_in_transaction(self):
+        storage = Storage()
+        with storage.edit() as transaction:
+            transaction['key'] = 'value'
+            self.assertEqual('value', transaction['key'])
+        self.assertEqual('value', storage['key'])
 
 if __name__ == "__main__":
     unittest.main()

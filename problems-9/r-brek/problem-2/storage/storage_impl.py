@@ -40,7 +40,7 @@ class StorageTransactionManager:
             return  # forwards exception
 
     def __getitem__(self, key):
-        return self._storage[key]
+        return self._transaction_data[key] if key in self._transaction_data else self._storage[key]
 
     def __setitem__(self, key, value):
         self._transaction_data[key] = value
