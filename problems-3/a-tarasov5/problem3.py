@@ -61,7 +61,7 @@ class Vector:
         return str(self._content)
 
     def __repr__(self):
-        return f"Vector{self._content}"
+        return f"Vector({self._content})"
 
     def __len__(self):
         return len(self._content)
