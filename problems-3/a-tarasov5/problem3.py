@@ -122,6 +122,9 @@ class VectorTest(unittest.TestCase):
         v1[0] = 444
         self.assertEqual(v1[0], 444)
 
+    def test_repr(self):
+        v1 = Vector(range(10))
+        self.assertEqual(v1, eval(repr(v1)))
 
 if __name__ == "__main__":
     unittest.main()
