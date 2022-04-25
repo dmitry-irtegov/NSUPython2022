@@ -16,6 +16,7 @@ class URLTestCase(unittest.TestCase):
             'http://user:pass@example.com:123/one/two.three?q1=a1&q2=a2#body',
             'http://www.microsoft.xn--comindex-g03d.html.irongeek.com',
             'http://localhost/',
+            'http://localhost/blah_blah',
             'http://userid:password@example.com:8080',
             'http://userid:password@example.com:8080/',
             'http://userid@example.com',
@@ -38,7 +39,10 @@ class URLTestCase(unittest.TestCase):
             'http://example.com?foo=bar',
             'http://example.com#foo',
             'http://example.com.',
-            'www.google.com/unicorn'
+            'www.google.com/unicorn',
+            'http://example',
+            'http://example/foo/?bar=baz&inga=42&quux',
+            'https://userid:password@a.b.c.d.example:8080',
         )
 
         for url in correct_urls:
