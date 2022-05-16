@@ -1,16 +1,18 @@
 import sys
+import unittest
 
-
-def find_substrings():
-    file_path = input("Filepath: ")
+def load_file(filename):
     try:
-        with open(file_path, 'r', encoding='utf-8') as source:
-            seq = input("Enter sequence to search for: ")
-            text = ''.join(source.read()[2:].split('\n'))
+        with open(filename) as file:
+            file.read(2)
+            pi_number = file.read().replace('\n', '')
     except OSError as e:
         sys.exit(f'{e.filename}: {e.strerror}')
-    return finder(seq, text)
+    return pi_number
 
+def find_substrings(sequence):
+    pi = load_file("pi.txt")
+    return finder(sequence, pi)
 
 def finder(seq, text):
     i = 0
@@ -26,6 +28,8 @@ def finder(seq, text):
     return counter, positions
 
 if __name__ == '__main__':
-    count, positions = find_substrings()
-print("Found " + str(count) + " results.")
-print("Positions: " + str(positions))
+    sequence = input("Enter sequence to search for: ")
+    count, positions = find_substrings(sequence)
+    print("Found " + str(count) + " results.")
+    print("Positions: " + str(positions))
+
