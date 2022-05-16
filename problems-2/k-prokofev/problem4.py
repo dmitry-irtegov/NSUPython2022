@@ -1,5 +1,6 @@
 import sys
 import unittest
+import argparse
 
 def load_file(filename):
     try:
@@ -10,8 +11,8 @@ def load_file(filename):
         sys.exit(f'{e.filename}: {e.strerror}')
     return pi_number
 
-def find_substrings(sequence):
-    pi = load_file("pi.txt")
+def find_substrings(sequence, filename):
+    pi = load_file(filename)
     return finder(sequence, pi)
 
 def finder(seq, text):
@@ -28,8 +29,17 @@ def finder(seq, text):
     return counter, positions
 
 if __name__ == '__main__':
+    filename = "pi.txt"
+
+    parser = argparse.ArgumentParser(description='Pi sequences finder.')
+    parser.add_argument('-f')
+    args = parser.parse_args()
+
+    if args.f:
+        filename = args.f
+
     sequence = input("Enter sequence to search for: ")
-    count, positions = find_substrings(sequence)
+    count, positions = find_substrings(sequence, filename)
     print("Found " + str(count) + " results.")
     print("Positions: " + str(positions))
 
