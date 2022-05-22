@@ -2,4 +2,3 @@
 build/
 cmake-build-*/
 __pycache__/
-mandelbrot.so

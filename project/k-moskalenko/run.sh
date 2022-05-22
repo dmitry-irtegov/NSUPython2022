@@ -2,6 +2,7 @@ mkdir build
 cd build || exit
 
 cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake --build .
+cmake --build . --clean-first
 
-python ../main.py
+cd ../src || exit
+python -m python
