@@ -1,6 +1,13 @@
-from mandelbrot import calculate_point
+from tkinter import Tk
+
+from .canvas import InteractiveCanvas
 
 if __name__ == '__main__':
-    point = -0.75, 0.05
-    result = calculate_point(*point)
-    print(f'The value at {point} is equal to {result}.')
+    root = Tk()
+    root.title("Mandelbrot")
+    root.resizable(False, False)
+
+    width, height = 1200, 900
+    canvas = InteractiveCanvas(root, width, height)
+
+    root.mainloop()
