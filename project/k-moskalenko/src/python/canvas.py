@@ -14,6 +14,10 @@ class InteractiveCanvas(Canvas):
         self._photoImage = None
         self._image_widget_ref = None
 
+        self._text_widget_ref = self.create_text(
+            width - 10, height - 10, anchor='se', justify='right',
+            fill='white', font=('normal', 15, 'bold'))
+
         self._fractal = Mandelbrot(width, height, zoomFactor=0.1)
         self._render()
 
@@ -44,7 +48,10 @@ class InteractiveCanvas(Canvas):
         self.delete(self._image_widget_ref)
         self._image_widget_ref = self.create_image(0, 0, image=self._photoImage, anchor='nw')
 
-        end = time.time()
+        self.tag_raise(self._text_widget_ref, self._image_widget_ref)
+        self.itemconfig(self._text_widget_ref, text=f'X: {self._fractal.xCenter:.3g}, '
+                                                    f'Y: {self._fractal.yCenter:.3g}, '
+                                                    f'Δ: {self._fractal.delta:.3g}')
 
-        print(f'\nRendering took {end - start:.2f} seconds (C++ part: {(c_end - start) / (end - start) * 100:.2f}%)')
-        print(f'Coordinates (x, y, delta) = {self._fractal.xCenter}, {self._fractal.yCenter}, {self._fractal.delta}')
+        end = time.time()
+        print(f'Rendering took {end - start:.2f} seconds (C++ part: {(c_end - start) / (end - start) * 100:.2f}%)')
