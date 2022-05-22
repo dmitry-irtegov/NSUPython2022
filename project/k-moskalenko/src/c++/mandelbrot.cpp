@@ -2,6 +2,8 @@
 #include <ccomplex>
 #include <random>
 
+#include "ctpl_stl.h"
+
 using pixel_t = uint32_t;
 
 namespace mandelbrot {
@@ -53,6 +55,8 @@ namespace mandelbrot {
     }
 
     const pixel_t *CalculateImage(int width, int height, double xMin, double xMax, double yMin, double yMax) {
+        static ctpl::thread_pool threadPool((int) std::thread::hardware_concurrency());
+
         static int prevWidth, prevHeight;
         static pixel_t *buffer;
 
@@ -63,13 +67,21 @@ namespace mandelbrot {
             prevHeight = height;
         }
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                double re = translate(x, width, xMin, xMax);
-                double im = translate(y, height, yMax, yMin);
+        std::future<void> futures[width];
 
-                buffer[y * width + x] = CalculatePoint(re, im);
-            }
+        for (int x = 0; x < width; x++) {
+            futures[x] = threadPool.push([=](int id) {
+                for (int y = 0; y < height; y++) {
+                    double re = translate(x, width, xMin, xMax);
+                    double im = translate(y, height, yMax, yMin);
+
+                    buffer[y * width + x] = CalculatePoint(re, im);
+                }
+            });
+        }
+
+        for (const auto &future: futures) {
+            future.wait();
         }
 
         return buffer;

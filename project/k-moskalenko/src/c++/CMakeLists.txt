@@ -1,5 +1,5 @@
 find_package(Python COMPONENTS Development)
-Python_add_library(mandelbrot mandelbrot.cpp)
+Python_add_library(mandelbrot mandelbrot.cpp ctpl_stl.h)
 
 add_custom_command(TARGET mandelbrot POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E create_symlink
