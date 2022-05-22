@@ -18,7 +18,7 @@ class InteractiveCanvas(Canvas):
             width - 10, height - 10, anchor='se', justify='right',
             fill='white', font=('normal', 15, 'bold'))
 
-        self._fractal = Mandelbrot(width, height, zoomFactor=0.1)
+        self._fractal = Mandelbrot(width, height, zoomFactor=0.3)
         self._render()
 
         self.bind('<Button-1>', self._zoom_in)

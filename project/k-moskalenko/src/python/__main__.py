@@ -7,7 +7,8 @@ if __name__ == '__main__':
     root.title("Mandelbrot")
     root.resizable(False, False)
 
-    width, height = 1200, 900
+    height = round(0.8 * root.winfo_screenheight())
+    width = round(1.4 * height)
     canvas = InteractiveCanvas(root, width, height)
 
     root.mainloop()
