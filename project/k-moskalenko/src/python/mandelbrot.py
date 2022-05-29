@@ -2,7 +2,7 @@ from mandelbrot import calculate_image
 
 
 class Mandelbrot:
-    def __init__(self, width, height, zoomFactor, x=-0.75, y=0.0, m=1.5):
+    def __init__(self, width, height, zoom_factor, x=-0.75, y=0.0, m=1.5):
         self.width, self.height = width, height
         self.xCenter, self.yCenter = x, y
         self.delta = m
@@ -21,34 +21,40 @@ class Mandelbrot:
         self._yMin = y - self._yDelta
         self._yMax = y + self._yDelta
 
-        self._zoomFactor = zoomFactor
+        self._zoomFactor = zoom_factor
         self._yScaleFactor = self.height / height
         self._xScaleFactor = self.width / width
 
     def update_pixels(self):
         self.pixels = calculate_image(self.width, self.height, self._xMin, self._xMax, self._yMin, self._yMax)
 
-    def move(self, event):
-        self._update_center(event)
+    def move(self, x, y):
+        self._update_center(x, y)
         self._update_bounds()
 
-    def zoom_in(self, event):
-        self._update_center(event)
-        self.delta *= self._zoomFactor
-        self._xDelta *= self._zoomFactor
-        self._yDelta *= self._zoomFactor
+    def zoom_in(self, x=None, y=None, amount=None):
+        if x and y:
+            self._update_center(x, y)
+        if amount is None:
+            amount = self._zoomFactor
+        self.delta *= amount
+        self._xDelta *= amount
+        self._yDelta *= amount
         self._update_bounds()
 
-    def zoom_out(self, event):
-        self._update_center(event)
-        self.delta /= self._zoomFactor
-        self._xDelta /= self._zoomFactor
-        self._yDelta /= self._zoomFactor
+    def zoom_out(self, x=None, y=None, amount=None):
+        if x and y:
+            self._update_center(x, y)
+        if amount is None:
+            amount = self._zoomFactor
+        self.delta /= amount
+        self._xDelta /= amount
+        self._yDelta /= amount
         self._update_bounds()
 
-    def _update_center(self, event):
-        self.xCenter = Mandelbrot._translate(event.x * self._xScaleFactor, 0, self.width, self._xMin, self._xMax)
-        self.yCenter = Mandelbrot._translate(event.y * self._yScaleFactor, self.height, 0, self._yMin, self._yMax)
+    def _update_center(self, x, y):
+        self.xCenter = Mandelbrot._translate(x * self._xScaleFactor, 0, self.width, self._xMin, self._xMax)
+        self.yCenter = Mandelbrot._translate(y * self._yScaleFactor, self.height, 0, self._yMin, self._yMax)
 
     def _update_bounds(self):
         self._xMin, self._xMax = self.xCenter - self._xDelta, self.xCenter + self._xDelta
