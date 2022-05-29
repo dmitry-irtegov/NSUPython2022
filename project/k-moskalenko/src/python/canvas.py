@@ -19,7 +19,7 @@ class InteractiveCanvas(Canvas):
             fill='white', font=('normal', 15, 'bold'))
 
         self._fractal = Mandelbrot(width, height, zoom_factor=0.3)
-        self._render()
+        self.render()
 
         self.bind('<Double-Button-1>', self._zoom_in)
         self.bind('<Button-2>', self._zoom_out)
@@ -60,7 +60,7 @@ class InteractiveCanvas(Canvas):
             self._motionX = event.x
             self._motionY = event.y
 
-        self._render()
+        self.render()
 
     def _move_begin(self, event):
         self._motionX = event.x
@@ -75,16 +75,16 @@ class InteractiveCanvas(Canvas):
             self._fractal.zoom_in(amount=0.75)
         else:
             self._fractal.zoom_in(event.x, event.y)
-        self._render()
+        self.render()
 
     def _zoom_out(self, event):
         if event.type == EventType.KeyPress:
             self._fractal.zoom_out(amount=0.75)
         else:
             self._fractal.zoom_out(event.x, event.y)
-        self._render()
+        self.render()
 
-    def _render(self):
+    def render(self):
         start = time.time()
         self._fractal.update_pixels()
         c_end = time.time()

@@ -6,10 +6,11 @@
 #include "ctpl_stl.h"
 
 namespace mandelbrot {
-    constexpr int max_iterate = 200;
-    constexpr int palette_size = max_iterate;
+    int max_iterate;
+    int palette_size;
 
-    static pixel_t palette[palette_size];
+    constexpr int max_palette_size = 5000;
+    static pixel_t palette[max_palette_size];
 
     double translate(int value, int size, double minVal, double maxVal) {
         double valueScaled = value / (double) size;
@@ -136,9 +137,47 @@ static PyObject *calculate_image(PyObject *, PyObject *args) {
     return PyObject_CallMethod(memoryView, "cast", "(s(ii))", "I", width, height);
 }
 
+static PyObject *set_max_iterate(PyObject *, PyObject *args) {
+    if (!PyArg_ParseTuple(args, "i", &mandelbrot::max_iterate)) {
+        return nullptr;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyObject *set_palette(PyObject *, PyObject *args) {
+    int palette_index;
+    if (!PyArg_ParseTuple(args, "ii", &palette_index, &mandelbrot::palette_size)) {
+        return nullptr;
+    }
+
+    switch (palette_index) {
+        case 0:
+            mandelbrot::GeneratePalette(spectrum);
+            break;
+        case 1:
+            mandelbrot::GeneratePalette(earthAndSky);
+            break;
+        case 2:
+            mandelbrot::GeneratePalette(grayscale);
+            break;
+        case 3:
+            mandelbrot::GenerateRandomPalette();
+            break;
+        default:
+            break;
+    }
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 static PyMethodDef MandelbrotMethods[] = {
         {"calculate_point", calculate_point, METH_VARARGS, "Calculates the pixel color at an imaginary point."},
         {"calculate_image", calculate_image, METH_VARARGS, "Calculates the pixel colors for an image."},
+        {"set_max_iterate", set_max_iterate, METH_VARARGS, "Sets the maximum number of iterations."},
+        {"set_palette",     set_palette,     METH_VARARGS, "Selects a preset palette for rendering."},
         {nullptr,           nullptr, 0,                    nullptr}
 };
 
@@ -151,6 +190,5 @@ static PyModuleDef MandelbrotModule = {
 };
 
 PyMODINIT_FUNC PyInit_mandelbrot() {
-    mandelbrot::GenerateRandomPalette();
     return PyModule_Create(&MandelbrotModule);
 }
