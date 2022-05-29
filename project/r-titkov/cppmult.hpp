@@ -17,6 +17,7 @@ EXPORT_SYMBOL void setCenterRelative(int x, int y);
 EXPORT_SYMBOL void setMaxSteps(int maxSteps);
 EXPORT_SYMBOL void zoomInFrame(int xmin, int ymin, int xmax, int ymax);
 EXPORT_SYMBOL void scaleFrame(double scale);
+EXPORT_SYMBOL void getState(double *centerXState, double *centerYState, double *dxState, double *dyState);
 
 #ifdef __cplusplus
 }

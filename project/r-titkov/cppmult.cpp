@@ -8,8 +8,8 @@
 int MAX_STEPS = 25;
 double MAX_COORDS = 3;
 
-int WINDOW_WIDTH = 500;
-int WINDOW_HEIGHT = 500;
+int WINDOW_WIDTH = 700;
+int WINDOW_HEIGHT = 700;
 
 double centerX = -0.5; 
 double centerY = 0;
@@ -19,17 +19,26 @@ char* colors;
 double BASE_WIDTH = 2.5;
 double BASE_HEIGHT = 2.5;
 
+double CALC_WIDTH = 2.5;
+double CALC_HEIGHT = 2.5;
+
 EXPORT_SYMBOL void setWindowSize(int width, int height) {
 	WINDOW_WIDTH = width;
 	WINDOW_HEIGHT = height;
+
+	CALC_WIDTH = BASE_WIDTH * (double) WINDOW_WIDTH / 700;
+	CALC_HEIGHT = BASE_HEIGHT * (double) WINDOW_HEIGHT / 700;
 }
 
 void scaleFrame(double scale) {
-	if ((scale > 1 && (BASE_WIDTH <= 1e-11 || BASE_HEIGHT <= 1e-11)) ||
-		 (scale < 1 && (BASE_WIDTH >= 6 || BASE_HEIGHT >= 6)))
+	if ((scale > 1 && (CALC_WIDTH <= 1e-11 || CALC_HEIGHT <= 1e-11)) ||
+		 (scale < 1 && (CALC_WIDTH >= 6 || CALC_HEIGHT >= 6)))
 		return;
+
 	BASE_WIDTH *= 1 / scale;
 	BASE_HEIGHT *= 1 / scale;
+	CALC_WIDTH = BASE_WIDTH * (double) WINDOW_WIDTH / 700;
+	CALC_HEIGHT = BASE_HEIGHT * (double) WINDOW_HEIGHT / 700;
 }
 
 void setCenter(double x, double y) {
@@ -38,8 +47,8 @@ void setCenter(double x, double y) {
 }
 
 void setCenterRelative(int x, int y) {
-	double newCenterX = centerX - BASE_WIDTH / 2 + BASE_WIDTH / WINDOW_WIDTH * x;
-	double newCenterY = centerY - BASE_HEIGHT / 2 + BASE_HEIGHT / WINDOW_HEIGHT * y;
+	double newCenterX = centerX - CALC_WIDTH / 2 + CALC_WIDTH / WINDOW_WIDTH * x;
+	double newCenterY = centerY - CALC_HEIGHT / 2 + CALC_HEIGHT / WINDOW_HEIGHT * y;
 	if (newCenterX <= -MAX_COORDS || newCenterX > MAX_COORDS || 
 		 newCenterY < -MAX_COORDS || newCenterY > MAX_COORDS)
 		return;
@@ -55,19 +64,22 @@ void zoomInFrame(int xmin, int ymin, int xmax, int ymax) {
 	double scale = WINDOW_WIDTH / (xmax - xmin);
 	BASE_WIDTH *= 1 / scale;
 	BASE_HEIGHT *= 1 / scale;
+	CALC_WIDTH = BASE_WIDTH * (double) WINDOW_WIDTH / 700;
+	CALC_HEIGHT = BASE_HEIGHT * (double) WINDOW_HEIGHT / 700;
 }
 
 EXPORT_SYMBOL void setMaxSteps(int maxSteps) {
 	MAX_STEPS = maxSteps;
-	const int BASE_COLORS_COUNT = 6;
-	double points[BASE_COLORS_COUNT] = {0, 0.16, 0.42, 0.6485, 0.9, 1};
+	const int BASE_COLORS_COUNT = 7;
+	double points[BASE_COLORS_COUNT] = {0, 0.03, 0.20, 0.4, 0.7, 0.99, 1};
 	int y[BASE_COLORS_COUNT][3] = {
 		{0, 7, 100}, 
-		{32, 107, 203}, 
-		{237, 255, 255}, 
-		{255, 170, 0}, 
-		{200, 10, 10},
-		{0, 0, 0}
+		{32, 107, 155}, 
+		{147, 187, 185}, 
+		{197, 190, 104}, 
+		{223, 150, 65}, 
+		{100, 10, 10},
+		{30, 0, 0}
 	};
 
 	double slopes[BASE_COLORS_COUNT - 1][3] = {};
@@ -175,6 +187,14 @@ EXPORT_SYMBOL void setMaxSteps(int maxSteps) {
 	}
 }
 
+void getState(double *centerXState, double *centerYState, double *dxState, double *dyState) {
+	*centerXState = centerX;
+	*centerYState = centerY;
+	*dxState = CALC_WIDTH / WINDOW_WIDTH;
+	*dyState = CALC_HEIGHT / WINDOW_HEIGHT;
+}
+	
+
 int calculateStep(double pointReal, double pointImag) {
 	double real = pointReal;
 	double imag = pointImag;
@@ -203,19 +223,19 @@ int calculateStep(double pointReal, double pointImag) {
 }
 
 void calculate(unsigned char* array) {
-	double xmin = centerX - BASE_WIDTH / 2;
-	double ymin = centerY - BASE_HEIGHT / 2;
+	double xmin = centerX - CALC_WIDTH / 2;
+	double ymin = centerY - CALC_HEIGHT / 2;
 
-	double dx = BASE_WIDTH / WINDOW_WIDTH;
-	double dy = BASE_HEIGHT / WINDOW_HEIGHT;
+	double dx = CALC_WIDTH / WINDOW_WIDTH;
+	double dy = CALC_HEIGHT / WINDOW_HEIGHT;
 
-	std::cout << std::endl;
-	std::cout << "Recalculate: "<< std::endl;
-	std::cout << "Center: (" << centerX << ", " << centerY << ")" << std::endl;
-	std::cout << "Top left corner: (" << xmin << ", " << ymin << ")" << std::endl;
-	std::cout << "deltas: (" << dx << ", " << dy << ")" << std::endl;
-	std::cout << "size: (" << BASE_WIDTH << ", " << BASE_HEIGHT << ")" << std::endl;
-	std::cout << std::endl;
+	// std::cout << std::endl;
+	// std::cout << "Recalculate: "<< std::endl;
+	// std::cout << "Center: (" << centerX << ", " << centerY << ")" << std::endl;
+	// std::cout << "Top left corner: (" << xmin << ", " << ymin << ")" << std::endl;
+	// std::cout << "deltas: (" << dx << ", " << dy << ")" << std::endl;
+	// std::cout << "size: (" << CALC_WIDTH << ", " << CALC_HEIGHT << ")" << std::endl;
+	// std::cout << std::endl;
 
 	const size_t nthreads = std::thread::hardware_concurrency();
 
@@ -238,9 +258,15 @@ void calculate(unsigned char* array) {
 					imag = ymin + dy * y;
 					step = calculateStep(real, imag);
 
-					array[3 * (y * WINDOW_WIDTH + x)] = colors[step * 3];
-					array[3 * (y * WINDOW_WIDTH + x) + 1] = colors[step * 3 + 1];
-					array[3 * (y * WINDOW_WIDTH + x) + 2] = colors[step * 3 + 2];
+					if (step == MAX_STEPS) {
+						array[3 * (y * WINDOW_WIDTH + x)] = 0;
+						array[3 * (y * WINDOW_WIDTH + x) + 1] = 0;
+						array[3 * (y * WINDOW_WIDTH + x) + 2] = 0;
+					} else {
+						array[3 * (y * WINDOW_WIDTH + x)] = colors[step * 3];
+						array[3 * (y * WINDOW_WIDTH + x) + 1] = colors[step * 3 + 1];
+						array[3 * (y * WINDOW_WIDTH + x) + 2] = colors[step * 3 + 2];
+					}
 				}
 			}		
 		}));
