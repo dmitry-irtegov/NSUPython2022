@@ -1,7 +1,8 @@
+#!mandelbrotEnv/bin/python3
+
 import argparse
 import ctypes
 import pathlib
-import time
 import tkinter as tk
 from PIL import ImageTk, Image
 
@@ -137,7 +138,6 @@ class App:
 			self.canvas_scale -= 0.1
 
 		if abs(self.zoom_direction) >= ZOOM_THRESHOLD:
-			print('zoom_direction:', self.zoom_direction)
 			scale = ctypes.c_double(self.canvas_scale)
 			self.c_lib.scaleFrame(scale)
 			self.updateFrame()
@@ -206,17 +206,11 @@ class App:
 		self.updateFrame()
 
 	def recalculate(self):
-		# start = time.time()
 		self.c_lib.calculate(self.buffer)
 		self.image = ImageTk.PhotoImage(Image.frombuffer('RGB', (self.window_width, self.window_height), self.buffer, 'raw'))
-		# end = time.time()
-		# print("Recalculating finished:", end - start)
 
 	def redraw(self):
-		# start = time.time()
 		self.canvas.create_image(0,0, anchor="nw", image=self.image)
-		# end = time.time()
-		# print("Redrawing finished:", end - start)
 
 	def updateFrame(self):
 		self.recalculate()
@@ -236,7 +230,7 @@ DX: {format(dxState.value,".1E")}\nDY: {format(dyState.value,".1E")}'
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument('libname') 
+	parser.add_argument('--libname', default='mandlebrotLib.so') 
 	args = parser.parse_args()
 
 	libname = pathlib.Path().absolute() / args.libname

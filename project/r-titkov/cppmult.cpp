@@ -229,22 +229,14 @@ void calculate(unsigned char* array) {
 	double dx = CALC_WIDTH / WINDOW_WIDTH;
 	double dy = CALC_HEIGHT / WINDOW_HEIGHT;
 
-	// std::cout << std::endl;
-	// std::cout << "Recalculate: "<< std::endl;
-	// std::cout << "Center: (" << centerX << ", " << centerY << ")" << std::endl;
-	// std::cout << "Top left corner: (" << xmin << ", " << ymin << ")" << std::endl;
-	// std::cout << "deltas: (" << dx << ", " << dy << ")" << std::endl;
-	// std::cout << "size: (" << CALC_WIDTH << ", " << CALC_HEIGHT << ")" << std::endl;
-	// std::cout << std::endl;
-
-	const size_t nthreads = std::thread::hardware_concurrency();
+	const int nthreads = std::thread::hardware_concurrency();
 
 	ctpl::thread_pool p(nthreads);
 	std::vector<std::future<void>> results;
 
 	int ROW_OFFSET = 25;
-	for (size_t fromRow = 0; fromRow < WINDOW_HEIGHT; fromRow += ROW_OFFSET) {
-		size_t toRow = fromRow + ROW_OFFSET;
+	for (int fromRow = 0; fromRow < WINDOW_HEIGHT; fromRow += ROW_OFFSET) {
+		int toRow = fromRow + ROW_OFFSET;
 		if (toRow > WINDOW_HEIGHT)
 			toRow = WINDOW_HEIGHT;
 
@@ -272,7 +264,7 @@ void calculate(unsigned char* array) {
 		}));
 	}
 
-	for (int i = 0; i < results.size(); i += 1) {
+	for (unsigned long i = 0; i < results.size(); i += 1) {
 		results[i].get();
 	}
 }

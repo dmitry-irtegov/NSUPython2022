@@ -3,7 +3,8 @@
 ## Linux x64/arm64 or MacOS x64/arm64
 
 To run project on **Linux x64/arm64** or **MacOS x64/arm64**:
-`./run.sh`
+`./build.sh`  
+`./main.py`
 
 ## Other system
 On other system it is required to build c++ library:  
