@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 from tkinter import Tk, Frame, Label, OptionMenu, Scale, IntVar, StringVar
 
 from mandelbrot import set_palette, set_max_iterate
-from .canvas import InteractiveCanvas
+from canvas import InteractiveCanvas
 
 
 def update_palette(*_):

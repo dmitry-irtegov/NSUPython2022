@@ -3,7 +3,7 @@ from tkinter import Canvas, EventType
 
 from PIL import Image, ImageTk
 
-from .mandelbrot import Mandelbrot
+from fractal import Mandelbrot
 
 
 class InteractiveCanvas(Canvas):
