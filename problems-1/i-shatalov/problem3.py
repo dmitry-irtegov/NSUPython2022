@@ -45,7 +45,6 @@ if __name__ == "__main__":
         try:
             n = int(input("Please enter integer number > 0: "))
             print('->'.join(map(str, collatz_conjecture(n))))
-            exit()
         except ValueError as e:
             print("Error! Please enter valid integer number > 0: ", e)
         except KeyboardInterrupt:
@@ -53,6 +52,9 @@ if __name__ == "__main__":
             exit()
         except IOError:
             print("IO error occurred. Please enter only integer number > 0.")
+        except EOFError:
+            print("EOF occured. Aborting..")
+            exit()
         except Exception:
             print("Unexpected error occurred. Aborting..")
             exit()
