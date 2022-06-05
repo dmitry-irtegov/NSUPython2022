@@ -14,6 +14,9 @@ class InteractiveCanvas(Canvas):
         self._photoImage = None
         self._image_widget_ref = None
 
+        self._eventTimestampDelta = None
+        self._eventIgnoreThreshold = 100
+
         self._text_widget_ref = self.create_text(
             width - 10, height - 10, anchor='se', justify='right',
             fill='white', font=('normal', 15, 'bold'))
@@ -42,6 +45,9 @@ class InteractiveCanvas(Canvas):
         self.focus_set()
 
     def _move(self, event):
+        if self._should_ignore_event(event):
+            return
+
         mid_x = self._fractal.width // 2
         mid_y = self._fractal.height // 2
         move_amount = 10
@@ -71,6 +77,9 @@ class InteractiveCanvas(Canvas):
         self._motionY = None
 
     def _zoom_in(self, event):
+        if self._should_ignore_event(event):
+            return
+
         if event.type == EventType.KeyPress:
             self._fractal.zoom_in(amount=0.75)
         else:
@@ -78,11 +87,20 @@ class InteractiveCanvas(Canvas):
         self.render()
 
     def _zoom_out(self, event):
+        if self._should_ignore_event(event):
+            return
+
         if event.type == EventType.KeyPress:
             self._fractal.zoom_out(amount=0.75)
         else:
             self._fractal.zoom_out(event.x, event.y)
         self.render()
+
+    def _should_ignore_event(self, event):
+        if self._eventTimestampDelta is None:
+            self._eventTimestampDelta = int(1000 * time.time()) - event.time
+        current_time = int(1000 * time.time()) - self._eventTimestampDelta
+        return current_time - event.time > self._eventIgnoreThreshold
 
     def render(self):
         start = time.time()
