@@ -1,9 +1,9 @@
 #!mandelbrotEnv/bin/python3
 
-import argparse
 import ctypes
 import pathlib
 import tkinter as tk
+import time
 from PIL import ImageTk, Image
 
 
@@ -18,6 +18,7 @@ class App:
 	previous_center = None
 	zoom_direction = 0
 	infoMenu = None
+	time_diff = None
 
 	def __init__(self, c_lib, window_height=700, window_width=700, max_steps=600):
 		self.c_lib = c_lib
@@ -91,7 +92,16 @@ class App:
 		tk.Label(self.infoMenu, text="Move with left button presses - choose part to zoom in").grid(
 					row=6, column=0, sticky=tk.N, pady=5, padx=40)
 
+	def checkIfSkipEvent(self, event):
+		if (self.time_diff == None):
+			self.time_diff = event.time - time.time_ns() // 1000000
+
+		timestamp = self.time_diff + time.time_ns() // 1000000 - event.time
+		return timestamp > 10
+
 	def moveFrame(self, event):
+		if self.checkIfSkipEvent(event):
+			return
 		centerX = ctypes.c_int32(self.window_width // 2)
 		centerY = ctypes.c_int32(self.window_height // 2)
 
@@ -107,7 +117,7 @@ class App:
 		self.c_lib.setCenterRelative(centerX, centerY)
 		self.updateFrame()
 
-	def zoomInFrame(self, point1, point2):
+	def zoomInFrame(self, point1, point2):	
 		xmin = max(min(point1[0], point2[0]), 0)
 		ymin = max(min(point1[1], point2[1]), 0)
 		xmax = min(max(point1[0], point2[0]), self.window_width  - 1)
@@ -117,6 +127,9 @@ class App:
 		self.updateFrame()
 
 	def buttonZoom(self, event):
+		if self.checkIfSkipEvent(event):
+			return
+
 		if event.char == '+' or event.char == '=':
 			self.canvas_scale += 0.1
 		elif event.char == '-' or event.char == '_':
@@ -129,6 +142,8 @@ class App:
 		self.zoom_direction = 0
 
 	def mouseZoom(self, event):
+		if self.checkIfSkipEvent(event):
+			return
 		ZOOM_THRESHOLD = 1
 		self.zoom_direction += event.delta
 
@@ -227,13 +242,8 @@ DX: {format(dxState.value,".1E")}\nDY: {format(dyState.value,".1E")}'
 		self.infoButton.place(x = self.window_width - 50, y = 10)
 
 
-
 if __name__ == "__main__":
-	parser = argparse.ArgumentParser()
-	parser.add_argument('--libname', default='mandlebrotLib.so') 
-	args = parser.parse_args()
-
-	libname = pathlib.Path().absolute() / args.libname
+	libname = pathlib.Path().absolute() / 'build/mandelbrot.so'
 	
 	c_lib = ctypes.CDLL(libname)
 
