@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  apt-get -y install g++ python3-venv python3-distutils python3-tk
+  apt update
+  apt install -y python3-pip python3-dev python3-venv python3-tk
 fi
 
 python3 -m venv .venv
