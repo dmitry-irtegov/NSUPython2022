@@ -1,0 +1,5 @@
+.idea/
+.venv/
+build/
+cmake-build-*/
+__pycache__/
