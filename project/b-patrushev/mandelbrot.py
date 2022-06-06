@@ -14,7 +14,7 @@ class Mandelbrot:
         self.xmax = self.x + self.m
         self.ymin = self.y - self.m
         self.ymax = self.y + self.m
-        so_file = "./Mandelbrot.so"
+        so_file = "./build/libMandelbrot.so"
         self.cp = ctypes.CDLL(so_file)
         self.cp.mandelbrot.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int]
         self.cp.mandelbrot.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_int))
